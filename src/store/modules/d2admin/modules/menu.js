@@ -8,13 +8,15 @@ import setting from '@/setting.js'
  * @param {Array} menu 原始的菜单数据
  */
 function supplementMenuPath (menu) {
-  return menu.map(e => ({
-    ...e,
-    path: e.path || uniqueId('d2-menu-empty-'),
-    ...e.children ? {
-      children: supplementMenuPath(e.children)
-    } : {}
-  }))
+  return menu.map(e => {
+    return {
+      ...e,
+      path: e.path || uniqueId('d2-menu-empty-'),
+      ...e.children ? {
+        children: supplementMenuPath(e.children)
+      } : {}
+    }
+  })
 }
 
 export default {
