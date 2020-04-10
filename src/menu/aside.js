@@ -4,6 +4,7 @@ export default [
   {
     title: "页面",
     icon: "folder-o",
+    path: "/page",
     children: [
       {
         path: "/page1",

@@ -1,6 +1,6 @@
 <template>
-  <el-menu-item :index="menu.name || uniqueId">
-    <d2-icon-svg :name="menu.icon"/>
+  <el-menu-item :index="menu.path || uniqueId">
+    <d2-icon-svg :name="menu.icon||''"/>
     <span slot="title">{{menu.title}}</span>
   </el-menu-item>
 </template>

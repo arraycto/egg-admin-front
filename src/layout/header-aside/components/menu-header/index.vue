@@ -12,15 +12,13 @@
         flex-box="0"
         :style="'transform: translateX(' + currentTranslateX + 'px);'"
       >
-        <el-menu ref="menu" mode="horizontal" :default-active="active" @select="handleMenuSelect">
-          <template v-for="(menu, menuIndex) in header">
-            <d2-layout-header-aside-menu-item
-              v-if="menu.children === undefined"
-              :menu="menu"
-              :key="menuIndex"
-            />
-            <d2-layout-header-aside-menu-sub v-else :menu="menu" :key="menuIndex" />
-          </template>
+        <el-menu ref="menu" mode="horizontal" :default-active="active">
+          <el-menu-item
+            v-for="(item, index) in header"
+            :index="item.path"
+            :key="index"
+            @click="headerMenuClick(item)"
+          >{{item.title}}</el-menu-item>
         </el-menu>
       </div>
     </div>
@@ -48,19 +46,12 @@
 <script>
 import { throttle } from "lodash";
 import { mapState } from "vuex";
+import util from "@/libs/util.js";
 import menuMixin from "../mixin/menu";
-import d2LayoutMainMenuItem from "../components/menu-item/index.vue";
-import d2LayoutMainMenuSub from "../components/menu-sub/index.vue";
+
 export default {
   name: "d2-layout-header-aside-menu-header",
   mixins: [menuMixin],
-  components: {
-    "d2-layout-header-aside-menu-item": d2LayoutMainMenuItem,
-    "d2-layout-header-aside-menu-sub": d2LayoutMainMenuSub
-  },
-  computed: {
-    ...mapState("d2admin/menu", ["header"])
-  },
   data() {
     return {
       active: "",
@@ -70,6 +61,9 @@ export default {
       currentTranslateX: 0,
       throttledCheckScroll: null
     };
+  },
+  computed: {
+    ...mapState("d2admin/menu", ["header"])
   },
   watch: {
     "$route.matched": {
@@ -87,6 +81,13 @@ export default {
     }
   },
   methods: {
+    headerMenuClick(menu) {
+      if (menu.children) {
+        this.$store.commit("d2admin/menu/asideSet", menu.children || []);
+      } else {
+        this.handleMenuSelect(menu);
+      }
+    },
     scroll(direction) {
       if (direction === "left") {
         // 向右滚动

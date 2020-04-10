@@ -1,6 +1,6 @@
 import request from "@/plugin/axios";
 
-export function login(data) {
+export function userLogin(data) {
   return request({
     url: "/user/login",
     method: "post",

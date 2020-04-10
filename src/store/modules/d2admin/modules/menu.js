@@ -1,22 +1,26 @@
-import { uniqueId } from 'lodash'
+import { uniqueId } from "lodash";
 // 设置文件
-import setting from '@/setting.js'
+import setting from "@/setting.js";
+import { getMenu } from "@/api/sys/menu.js";
+import { generateRoutes } from "@/libs/util.js";
 
 /**
  * 给菜单数据补充上 path 字段
  * https://github.com/d2-projects/d2-admin/issues/209
  * @param {Array} menu 原始的菜单数据
  */
-function supplementMenuPath (menu) {
+function supplementMenuPath(menu) {
   return menu.map(e => {
     return {
       ...e,
-      path: e.path || uniqueId('d2-menu-empty-'),
-      ...e.children ? {
-        children: supplementMenuPath(e.children)
-      } : {}
-    }
-  })
+      path: e.path || uniqueId("d2-menu-empty-"),
+      ...(e.children
+        ? {
+            children: supplementMenuPath(e.children)
+          }
+        : {})
+    };
+  });
 }
 
 export default {
@@ -35,56 +39,78 @@ export default {
      * @param {Object} context
      * @param {Boolean} collapse is collapse
      */
-    asideCollapseSet ({ state, dispatch }, collapse) {
+    asideCollapseSet({ state, dispatch }, collapse) {
       return new Promise(async resolve => {
         // store 赋值
-        state.asideCollapse = collapse
+        state.asideCollapse = collapse;
         // 持久化
-        await dispatch('d2admin/db/set', {
-          dbName: 'sys',
-          path: 'menu.asideCollapse',
-          value: state.asideCollapse,
-          user: true
-        }, { root: true })
+        await dispatch(
+          "d2admin/db/set",
+          {
+            dbName: "sys",
+            path: "menu.asideCollapse",
+            value: state.asideCollapse,
+            user: true
+          },
+          { root: true }
+        );
         // end
-        resolve()
-      })
+        resolve();
+      });
     },
     /**
      * 切换侧边栏展开和收缩
      * @param {Object} context
      */
-    asideCollapseToggle ({ state, dispatch }) {
+    asideCollapseToggle({ state, dispatch }) {
       return new Promise(async resolve => {
         // store 赋值
-        state.asideCollapse = !state.asideCollapse
+        state.asideCollapse = !state.asideCollapse;
         // 持久化
-        await dispatch('d2admin/db/set', {
-          dbName: 'sys',
-          path: 'menu.asideCollapse',
-          value: state.asideCollapse,
-          user: true
-        }, { root: true })
+        await dispatch(
+          "d2admin/db/set",
+          {
+            dbName: "sys",
+            path: "menu.asideCollapse",
+            value: state.asideCollapse,
+            user: true
+          },
+          { root: true }
+        );
         // end
-        resolve()
-      })
+        resolve();
+      });
     },
     /**
      * 从持久化数据读取侧边栏展开或者收缩
      * @param {Object} context
      */
-    asideCollapseLoad ({ state, dispatch }) {
+    asideCollapseLoad({ state, dispatch }) {
       return new Promise(async resolve => {
         // store 赋值
-        state.asideCollapse = await dispatch('d2admin/db/get', {
-          dbName: 'sys',
-          path: 'menu.asideCollapse',
-          defaultValue: setting.menu.asideCollapse,
-          user: true
-        }, { root: true })
+        state.asideCollapse = await dispatch(
+          "d2admin/db/get",
+          {
+            dbName: "sys",
+            path: "menu.asideCollapse",
+            defaultValue: setting.menu.asideCollapse,
+            user: true
+          },
+          { root: true }
+        );
         // end
-        resolve()
-      })
+        resolve();
+      });
+    },
+    getMenu({ state, commit }) {
+      return new Promise(async resolve => {
+        if (!state.header || !state.header.length) {
+          const res = await getMenu();
+          let menu = generateRoutes(res);
+          commit("headerSet", menu);
+        }
+        resolve(state.header);
+      });
     }
   },
   mutations: {
@@ -93,18 +119,18 @@ export default {
      * @param {Object} state state
      * @param {Array} menu menu setting
      */
-    headerSet (state, menu) {
+    headerSet(state, menu) {
       // store 赋值
-      state.header = supplementMenuPath(menu)
+      state.header = supplementMenuPath(menu);
     },
     /**
      * @description 设置侧边栏菜单
      * @param {Object} state state
      * @param {Array} menu menu setting
      */
-    asideSet (state, menu) {
+    asideSet(state, menu) {
       // store 赋值
-      state.aside = supplementMenuPath(menu)
+      state.aside = supplementMenuPath(menu);
     }
   }
-}
+};

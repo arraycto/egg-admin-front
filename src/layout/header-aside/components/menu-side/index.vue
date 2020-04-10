@@ -7,8 +7,8 @@
       ref="menu"
       @select="handleMenuSelect">
       <template v-for="(menu, menuIndex) in aside">
-        <d2-layout-header-aside-menu-item v-if="menu.children === undefined" :menu="menu" :key="menuIndex"/>
-        <d2-layout-header-aside-menu-sub v-else :menu="menu" :key="menuIndex"/>
+        <d2-layout-header-aside-menu-sub v-if="menu.children&&menu.children.length" :menu="menu" :key="menuIndex"/>
+        <d2-layout-header-aside-menu-item v-else :menu="menu" :key="menuIndex"/>
       </template>
     </el-menu>
     <div v-if="aside.length === 0 && !asideCollapse" class="d2-layout-header-aside-menu-empty" flex="dir:top main:center cross:center">

@@ -1,7 +1,7 @@
 import request from "@/plugin/axios";
 
 // 获取导航菜单
-export function getNav() {
+export function getMenu() {
   return request({
     url: "/menu/nav"
   });
