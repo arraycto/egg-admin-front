@@ -13,45 +13,42 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+  // 进度条
   NProgress.start();
-  const isLogin = util.cookies.get("token");
-  const isFrameOut = frameOut.some(item => item.name === to.name);
-  // if (isFrameOut ) {
-  //   next();
-  // }
-
-  if (!util.cookies.get("token") && to.name !== "login") {
-    // 未登录且前往页面不是登录页，跳转到登录页，携带上登陆成功之后需要跳转的页面完整路径
-    next({
-      // replace: true,
-      name: "login",
-      query: {
-        redirect: to.fullPath
-      }
-    });
-  } else if (util.cookies.get("token") && to.name === "login") {
-    // 已登录且前往页面时登录页时，跳转到首页
-    next({
-      name: "index"
-    });
+  // 关闭搜索面板
+  store.commit("d2admin/search/set", false);
+  const isLogin = util.cookies.get("token"); // 是否已登录
+  const isFrameOut = frameOut.some(item => item.name === to.name); // 是否框架外页面
+  const hasMenu = store.state.d2admin.menu.header.length; // 是否已获取菜单
+  if (isFrameOut) {
+    if (isLogin && to.name === "login") {
+      // 已登录且前往页面时登录页时，跳转到首页
+      next({ name: "index" });
+    }
   } else {
-    if (util.cookies.get("token") && !store.state.d2admin.menu.header.length) {
+    if (!isLogin) {
+      // 未登录，跳转到登录页，携带上登陆成功之后需要跳转的页面完整路径
+      next({
+        name: "login",
+        query: { redirect: to.fullPath }
+      });
+    } else if (!hasMenu) {
+      // 已登录，未获取到菜单
       const menuRoutes = await store.dispatch("d2admin/menu/getMenu");
+      store.commit("d2admin/page/init", [...frameIn, ...menuRoutes]);
       router.addRoutes(menuRoutes); // 动态的添加路由
       router.addRoutes(errorPage); // 增加404page
       next({ ...to, replace: true });
-    } else {
-      next(); // 否则全部重定向到登录页
-      NProgress.done();
     }
   }
+  // 确认已经加载多标签页数据 https://github.com/d2-projects/d2-admin/issues/201
+  await store.dispatch("d2admin/page/isLoaded");
+  // 确认已经加载组件尺寸设置 https://github.com/d2-projects/d2-admin/issues/198
+  await store.dispatch("d2admin/size/isLoaded");
+  next();
+  NProgress.done();
 });
 
-// router.afterEach(to => {
-//   Util.opendPage(router.app, to.name, to.params, to.query, to.meta, to.path);
-//   NProgress.done();
-//   window.scrollTo(0, 0);
-// });
 router.afterEach(to => {
   // 进度条
   NProgress.done();

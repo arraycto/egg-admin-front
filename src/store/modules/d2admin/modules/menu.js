@@ -108,6 +108,7 @@ export default {
           const res = await getMenu();
           let menu = generateRoutes(res);
           commit("headerSet", menu);
+          commit("d2admin/search/init", menu, { root: true });
         }
         resolve(state.header);
       });

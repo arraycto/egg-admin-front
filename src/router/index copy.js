@@ -59,7 +59,6 @@ router.beforeEach(async (to, from, next) => {
     } else if (!store.state.d2admin.menu.header.length) {
       // 还未请求菜单
       const menuRoutes = await store.dispatch("d2admin/menu/getMenu");
-      console.log(menuRoutes);
       // router.addRoutes(menuRoutes);
       let routesToAdd = [...menuRoutes, ...errorPage];
       // router.options.routes = routesToAdd;
@@ -67,11 +66,9 @@ router.beforeEach(async (to, from, next) => {
       return next({ ...to, replace: true });
     }
   }
-  console.log(router);
   NProgress.done();
   next();
   // const menuRoutes = await store.dispatch("d2admin/menu/getMenu");
-  // console.log(menuRoutes);
   // // router.addRoutes([
   // //   {
   // //     ...frameIn[0],

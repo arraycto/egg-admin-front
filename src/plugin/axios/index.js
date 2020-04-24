@@ -2,7 +2,6 @@ import store from "@/store";
 import axios from "axios";
 import { Message } from "element-ui";
 import util from "@/libs/util";
-
 // 创建一个错误
 function errorCreate(msg) {
   const error = new Error(msg);
@@ -36,8 +35,11 @@ function errorLog(error) {
 // 创建一个 axios 实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_API,
-  timeout: 5000 // 请求超时时间
+  timeout: 5000, // 请求超时时间
+  withCredentials: true
 });
+
+window.axios = service;
 
 // 请求拦截器
 service.interceptors.request.use(

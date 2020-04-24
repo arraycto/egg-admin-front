@@ -38,7 +38,7 @@ export default {
       const pool = []
       const push = function (menu, titlePrefix = []) {
         menu.forEach(m => {
-          if (m.children) {
+          if (m.children&&m.children.length) {
             push(m.children, [ ...titlePrefix, m.title ])
           } else {
             pool.push({

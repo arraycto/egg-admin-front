@@ -18,7 +18,10 @@
             :index="item.path"
             :key="index"
             @click="headerMenuClick(item)"
-          >{{item.title}}</el-menu-item>
+          >
+            <d2-icon :name="item.icon"></d2-icon>&nbsp;
+            <span>{{item.title}}</span>
+          </el-menu-item>
         </el-menu>
       </div>
     </div>
@@ -68,14 +71,13 @@ export default {
   watch: {
     "$route.matched": {
       handler(val) {
-        this.active = val[val.length - 1].path;
-        // const name = val[val.length - 1].name;
-        // this.active = name;
-        // this.$nextTick(() => {
-        //   if (this.header.length > 0 && this.$refs.menu) {
-        //     this.$refs.menu.activeIndex = name;
-        //   }
-        // });
+        const path = val[0].path;
+        this.active = path;
+        this.$nextTick(() => {
+          if (this.header.length > 0 && this.$refs.menu) {
+            this.$refs.menu.activeIndex = path;
+          }
+        });
       },
       immediate: true
     }

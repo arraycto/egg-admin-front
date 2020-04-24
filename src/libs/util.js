@@ -48,41 +48,48 @@ export const _import = file => {
     development: file => require("@/views/" + file).default,
     production: file => () => import("@/views/" + file)
   };
-  return env[process.env.NODE_ENV](file);
+  // return env[process.env.NODE_ENV](file);
+  return env.production(file);
 };
 
 export const generateRoutes = menuArr => {
-  const recursiveMenu = menu => {
+  const recursiveMenu = (menu, parent = { path: "" }) => {
     const children =
       menu.children && menu.children.length
-        ? menu.children.map(c => recursiveMenu(c))
+        ? menu.children.map(c => recursiveMenu(c, menu))
         : [];
     const component = menu.component
       ? menu.component === "Layout"
         ? layoutHeaderAside
         : _import(menu.component)
       : null;
+    const path = parent.path + menu.path;
     return {
       ...menu,
+      path,
       children,
       component,
       meta: {
         auth: menu.auth,
-        title: menu.title
+        title: menu.title,
+        cache: menu.cache
       }
     };
   };
   return menuArr.map(m => recursiveMenu(m));
 };
 
-export const dynamicRoutes = routeArr => {
-  let routes = [];
-  const recursiveRoutes = route => {
-    if (route.children && route.children.length) {
-      return route.children.forEach(item => recursiveRoutes(item));
+export const getMenuTree = list => {
+  return list.map(item => {
+    let children = [];
+    if (item.children && item.children.length) {
+      children = getMenuTree(item.children);
     }
-    routes.push(route);
-  };
-  routeArr.forEach(item => recursiveRoutes(item));
-  return routes;
+    return {
+      ...item,
+      label: item.title,
+      value: item._id,
+      children
+    };
+  });
 };
