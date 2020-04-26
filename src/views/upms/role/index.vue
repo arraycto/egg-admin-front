@@ -47,7 +47,7 @@
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
 import { getList, create, update, remove } from "@/api/upms/role";
-import { getList as getMenuList } from "@/api/admin/menu";
+import { getTree as getMenuTree } from "@/api/admin/menu";
 
 export default {
   name: "role",
@@ -66,8 +66,8 @@ export default {
     };
   },
   created() {
-    getMenuList().then(res => {
-      this.menuTreeData = this.$util.getMenuTree(res.data);
+    getMenuTree().then(res => {
+      this.menuTreeData = this.$util.getElTree(res.data);
     });
   },
   methods: {

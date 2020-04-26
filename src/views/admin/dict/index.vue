@@ -42,7 +42,7 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
-import { getList, create, update, remove } from "@/api/admin/dict";
+import { getTree, create, update, remove } from "@/api/admin/dict";
 
 export default {
   name: "dict",
@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       crudOption: {
-        getList,
+        getList: getTree,
         create,
         update,
         remove

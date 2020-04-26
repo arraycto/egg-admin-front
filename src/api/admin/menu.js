@@ -3,28 +3,28 @@ import request from "@/plugin/axios";
 // 获取导航菜单
 export function getMenu() {
   return request({
-    url: "/menu/nav"
+    url: "/menu/nav/get"
   });
 }
 
 // 获取权限
 export function getPermissions() {
   return request({
-    url: "/menu/permissions"
+    url: "/menu/permissions/get"
   });
 }
 
-// 获取菜单管理列表
-export function getList(params) {
+// 获取菜单管理列表树
+export function getTree(params) {
   return request({
-    url: "/menu/list",
+    url: "/menu/tree/get",
     params
   });
 }
 
 export function getInfo(id) {
   return request({
-    url: `/menu/${id}`
+    url: "/menu/" + id
   });
 }
 
@@ -36,9 +36,9 @@ export function create(data) {
   });
 }
 
-export function update(data) {
+export function update(id, data) {
   return request({
-    url: "/menu",
+    url: "/menu/" + id,
     method: "put",
     data
   });
@@ -48,13 +48,5 @@ export function remove(id) {
   return request({
     url: "/menu/" + id,
     method: "delete"
-  });
-}
-
-export function removes(data) {
-  return request({
-    url: "/menu",
-    method: "delete",
-    data
   });
 }

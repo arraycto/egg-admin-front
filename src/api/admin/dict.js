@@ -1,16 +1,16 @@
 import request from "@/plugin/axios";
 
-// 获取字典列表
-export function getList(params) {
+// 获取字典树
+export function getTree(params) {
   return request({
-    url: "/dict/list",
+    url: "/dict/tree/get",
     params
   });
 }
 
 export function getInfo(id) {
   return request({
-    url: `/dict/${id}`
+    url: "/dict/" + id
   });
 }
 
@@ -22,9 +22,9 @@ export function create(data) {
   });
 }
 
-export function update(data) {
+export function update(id, data) {
   return request({
-    url: "/dict",
+    url: "/dict/" + id,
     method: "put",
     data
   });
@@ -34,13 +34,5 @@ export function remove(id) {
   return request({
     url: "/dict/" + id,
     method: "delete"
-  });
-}
-
-export function removes(data) {
-  return request({
-    url: "/dict",
-    method: "delete",
-    data
   });
 }

@@ -79,11 +79,11 @@ export const generateRoutes = menuArr => {
   return menuArr.map(m => recursiveMenu(m));
 };
 
-export const getMenuTree = list => {
+export const getElTree = list => {
   return list.map(item => {
     let children = [];
     if (item.children && item.children.length) {
-      children = getMenuTree(item.children);
+      children = getElTree(item.children);
     }
     return {
       ...item,

@@ -17,19 +17,19 @@
       @selection-change="selectionChange"
       @row-del="rowDel"
     >
+      <template #roleIds="{row}">
+        <el-tag v-for="item in row.roles" :key="item._id">{{item.name}}</el-tag>
+      </template>
+      <template #deptId="{row}">
+        <span>{{row.dept&&row.dept.name}}</span>
+      </template>
       <template #deptIdForm="{row}">
         <dept-select v-model="row.deptId"></dept-select>
-      </template>
-      <template #roleIds="{row}">
-        <el-tag v-for="item in row.roleIdNames" :key="item._id">{{item.name}}</el-tag>
       </template>
       <template #roleIdsForm="{row}">
         <el-select v-model="row.roleIds" multiple>
           <el-option v-for="item in roleList" :key="item._id" :label="item.name" :value="item._id"></el-option>
         </el-select>
-      </template>
-      <template #deptId="{row}">
-        <span>{{row.deptIdName&&row.deptIdName.name}}</span>
       </template>
     </avue-crud>
   </d2-container>

@@ -9,14 +9,14 @@ export function getList(params) {
 
 export function getTree(params) {
   return request({
-    url: "/dept/tree",
+    url: "/dept/tree/get",
     params
   });
 }
 
 export function getInfo(id) {
   return request({
-    url: `/dept/${id}`
+    url: "/dept/" + id
   });
 }
 
@@ -30,7 +30,7 @@ export function create(data) {
 
 export function update(id, data) {
   return request({
-    url: `/dept/${id}`,
+    url: "/dept/" + id,
     method: "put",
     data
   });

@@ -37,8 +37,7 @@ export default {
       this.tableLoading = true;
       this.crudOption
         .getList({
-          current: this.page.currentPage,
-          size: this.page.pageSize,
+          ...this.page,
           ...this.searchForm
         })
         .then(response => {

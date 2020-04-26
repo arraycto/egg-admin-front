@@ -20,6 +20,7 @@ export const tableOption = {
       label: "密码",
       prop: "password",
       type: "password",
+      hide: true,
       editDisplay: false,
       rules: [
         {
@@ -50,7 +51,7 @@ export const tableOption = {
       label: "性别",
       prop: "gender",
       type: "select",
-      dicUrl: "/dictType/gender"
+      dicUrl: "/dict/type/gender"
     },
     {
       label: "邮箱",

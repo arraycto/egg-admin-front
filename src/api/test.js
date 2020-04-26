@@ -11,7 +11,7 @@ export function getList(params) {
 // 获取单条信息
 export function getInfo(id) {
   return request({
-    url: `/test/${id}`
+    url: "/test/" + id
   });
 }
 
@@ -25,27 +25,18 @@ export function create(data) {
 }
 
 // 修改
-export function update(data) {
+export function update(id, data) {
   return request({
-    url: "/test",
+    url: "/test/" + id,
     method: "put",
     data
   });
 }
 
-// 删除单个
+// 删除
 export function remove(id) {
   return request({
-    url: `/test/${id}`,
+    url: "/test/" + id,
     method: "delete"
-  });
-}
-
-// 批量删除
-export function removes(data) {
-  return request({
-    url: "/test",
-    method: "delete",
-    data
   });
 }

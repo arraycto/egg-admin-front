@@ -10,7 +10,7 @@ export function userLogin(data) {
 
 export function resetPassword(data) {
   return request({
-    url: "/user/password",
+    url: "/user/password/reset",
     method: "put",
     data
   });

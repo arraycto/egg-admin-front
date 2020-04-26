@@ -1,7 +1,7 @@
 import { uniqueId } from "lodash";
 // 设置文件
 import setting from "@/setting.js";
-import { getMenu } from "@/api/sys/menu.js";
+import { getMenu } from "@/api/admin/menu.js";
 import { generateRoutes } from "@/libs/util.js";
 
 /**
