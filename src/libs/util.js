@@ -2,6 +2,7 @@ import cookies from "./util.cookies";
 import db from "./util.db";
 import log from "./util.log";
 import layoutHeaderAside from "@/layout/header-aside";
+import pageIframe from "@/layout/page-iframe";
 
 const util = {
   cookies,
@@ -52,19 +53,25 @@ export const _import = file => {
   return env.production(file);
 };
 
-export const generateRoutes = menuArr => {
-  const recursiveMenu = (menu, parent = { path: "" }) => {
+export const generateRoutes = (menuArr, parent = { path: "" }) => {
+  return menuArr.map(menu => {
     const children =
       menu.children && menu.children.length
-        ? menu.children.map(c => recursiveMenu(c, menu))
+        ? generateRoutes(menu.children, menu)
         : [];
-    const component = menu.component
-      ? menu.component === "Layout"
-        ? layoutHeaderAside
-        : _import(menu.component)
-      : null;
-    const path = parent.path + menu.path;
-    return {
+    let path = parent.path + menu.path;
+    let component = null;
+    let url = "";
+    if (menu.component && menu.component === "Layout") {
+      component = layoutHeaderAside;
+    } else if (menu.component && menu.component === "Iframe") {
+      path = "/page-iframe/" + menu.name;
+      url = menu.path;
+      component = pageIframe;
+    } else if (menu.component) {
+      component = _import(menu.component);
+    }
+    const result = {
       ...menu,
       path,
       children,
@@ -72,24 +79,10 @@ export const generateRoutes = menuArr => {
       meta: {
         auth: menu.auth,
         title: menu.title,
-        cache: menu.cache
+        cache: menu.cache,
+        url
       }
     };
-  };
-  return menuArr.map(m => recursiveMenu(m));
-};
-
-export const getElTree = list => {
-  return list.map(item => {
-    let children = [];
-    if (item.children && item.children.length) {
-      children = getElTree(item.children);
-    }
-    return {
-      ...item,
-      label: item.title,
-      value: item._id,
-      children
-    };
+    return result;
   });
 };

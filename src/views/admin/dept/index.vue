@@ -17,14 +17,13 @@
       @selection-change="selectionChange"
       @row-del="rowDel"
     >
-      <template #parentNameForm="{row}">
-        <avue-input v-model="row.parentId" placeholder="请选择上级部门" type="tree" :dic="menuTree"></avue-input>
-      </template>
-      <template #icon="{row}">
-        <d2-icon :name="row.icon" />
-      </template>
-      <template #iconForm="{row}">
-        <d2-icon-select v-model="row.icon"></d2-icon-select>
+      <template #parentIdForm="{row}">
+        <avue-input-tree
+          v-model="row.parentId"
+          placeholder="请选择上级部门"
+          :dic="deptTree"
+          :props="{label:'name',value:'_id'}"
+        ></avue-input-tree>
       </template>
       <template #menu="{row}">
         <el-button type="text" size="small" icon="el-icon-plus" @click="addDept(row)">新增下级</el-button>
@@ -53,25 +52,12 @@ export default {
     };
   },
   computed: {
-    menuTree() {
-      const getDeptTree = list => {
-        return list.map(item => {
-          let children = [];
-          if (item.children && item.children.length) {
-            children = getDeptTree(item.children);
-          }
-          return {
-            label: item.name,
-            value: item._id,
-            children
-          };
-        });
-      };
+    deptTree() {
       return [
         {
-          label: "一级部门",
-          value: "0",
-          children: getDeptTree(this.tableData)
+          name: "一级部门",
+          _id: "0",
+          children: this.tableData
         }
       ];
     }

@@ -18,7 +18,12 @@
       @row-del="rowDel"
     >
       <template #parentIdForm="{row}">
-        <avue-input v-model="row.parentId" placeholder="请选择上级菜单" type="tree" :dic="menuTree"></avue-input>
+        <avue-input-tree
+          v-model="row.parentId"
+          placeholder="请选择上级菜单"
+          :dic="menuTree"
+          :props="{label:'title',value:'_id'}"
+        ></avue-input-tree>
       </template>
       <template #icon="{row}">
         <d2-icon :name="row.icon" />
@@ -54,24 +59,11 @@ export default {
   },
   computed: {
     menuTree() {
-      const getMenuTree = list => {
-        return list.map(item => {
-          let children = [];
-          if (item.children && item.children.length) {
-            children = getMenuTree(item.children);
-          }
-          return {
-            label: item.title,
-            value: item._id,
-            children
-          };
-        });
-      };
       return [
         {
-          label: "一级菜单",
-          value: "0",
-          children: getMenuTree(this.tableData)
+          title: "一级菜单",
+          _id: "0",
+          children: this.tableData
         }
       ];
     }

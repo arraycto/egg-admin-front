@@ -6,6 +6,7 @@ export const tableOption = {
     {
       label: "上级菜单",
       prop: "parentId",
+      value: "0",
       hide: true,
       formslot: true,
       span: 24,
@@ -84,7 +85,8 @@ export const tableOption = {
       label: "路由缓存",
       prop: "cache",
       type: "switch",
-      span: 24
+      span: 24,
+      default: true
     }
   ]
 };

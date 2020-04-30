@@ -33,6 +33,8 @@
         node-key="_id"
         default-expand-all
         show-checkbox
+        :check-strictly="true"
+        :props="{label:'title'}"
         @check="menuCheck"
       ></el-tree>
       <span slot="footer">
@@ -67,7 +69,7 @@ export default {
   },
   created() {
     getMenuTree().then(res => {
-      this.menuTreeData = this.$util.getElTree(res.data);
+      this.menuTreeData = res.data;
     });
   },
   methods: {
@@ -77,8 +79,8 @@ export default {
       this.formData = Object.assign({}, row);
       this.$refs.menuTree.setCheckedKeys(row.menuIds);
     },
-    menuCheck(VNode, { checkedKeys }) {
-      this.formData.menuIds = checkedKeys;
+    menuCheck(VNode, { checkedKeys, halfCheckedKeys }) {
+      this.formData.menuIds = [...checkedKeys, ...halfCheckedKeys];
     },
     async saveMenu() {
       const { _id, menuIds } = this.formData;

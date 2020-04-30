@@ -2,20 +2,18 @@
 import Vue from "vue";
 import i18n from "./i18n";
 import App from "./App";
-// 核心插件
-import d2Admin from "@/plugin/d2admin";
 // store
 import store from "@/store/index";
 
 // 菜单和路由设置
 import router from "./router";
-import menuHeader from "@/menu/header";
-import menuAside from "@/menu/aside";
-import { frameIn } from "@/router/routes";
 
 // Avue
 import Avue from "@smallwei/avue";
 import "@smallwei/avue/lib/index.css";
+
+// 核心插件
+import d2Admin from "@/plugin/d2admin";
 
 // 核心插件
 Vue.use(d2Admin);
@@ -26,16 +24,7 @@ new Vue({
   store,
   i18n,
   render: h => h(App),
-  created() {
-    // 处理路由 得到每一级的路由设置
-    // this.$store.commit("d2admin/page/init", frameIn);
-    // 设置顶栏菜单
-    // this.$store.commit('d2admin/menu/headerSet', menuHeader)
-    // 设置侧边栏菜单
-    // this.$store.commit('d2admin/menu/asideSet', menuAside)
-    // 初始化菜单搜索功能
-    // this.$store.commit('d2admin/search/init', menuHeader)
-  },
+  created() {},
   mounted() {
     // 展示系统信息
     this.$store.commit("d2admin/releases/versionShow");

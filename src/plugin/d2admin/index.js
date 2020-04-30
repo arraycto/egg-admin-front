@@ -3,6 +3,7 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 // flex 布局库
 import "flex.css";
+import "@/styles/index.scss";
 // 组件
 import "@/components";
 // svg 图标

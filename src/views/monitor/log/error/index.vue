@@ -16,46 +16,25 @@
       @refresh-change="getDataList"
       @selection-change="selectionChange"
       @row-del="rowDel"
-    >
-      <template #menu="{row}">
-        <el-button
-          type="text"
-          size="small"
-          icon="el-icon-plus"
-          @click="addDictItem(row)"
-          v-if="row.parentId==='0'"
-        >新增字典项</el-button>
-      </template>
-    </avue-crud>
+    ></avue-crud>
   </d2-container>
 </template>
 
 <script>
 import crudMixin from "@/mixins/crud";
-import { tableOption } from "./option";
-import { getTree, create, update, remove } from "@/api/admin/dict";
+import { tableOption } from "../option";
+import { getErrorLog } from "@/api/log";
 
 export default {
-  name: "dict",
+  name: "log-error",
   mixins: [crudMixin],
   data() {
     return {
       crudOption: {
-        getList: getTree,
-        create,
-        update,
-        remove
+        getList: getErrorLog
       },
       tableOption
     };
-  },
-  methods: {
-    async addDictItem(row) {
-      this.$refs.crud.rowAdd();
-      await this.$nextTick();
-      this.formData.parentId = row._id;
-      this.formData.type = row.type;
-    }
   }
 };
 </script>

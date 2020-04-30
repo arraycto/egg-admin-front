@@ -46,7 +46,7 @@ export default {
     ]),
     handleClick () {
       this.$router.push({
-        name: 'log'
+        name: 'sys-log'
       })
     }
   }

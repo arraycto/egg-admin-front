@@ -5,17 +5,11 @@ export const tableOption = {
   column: [
     {
       label: "上级部门",
-      prop: "parentName",
+      prop: "parentId",
+      value: "0",
       hide: true,
       formslot: true,
-      span: 24
-    },
-    {
-      label: "父节点ID",
-      prop: "parentId",
-      hide: true,
-      display: false,
-      value: "0",
+      span: 24,
       rules: [
         {
           required: true,
