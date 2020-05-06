@@ -17,14 +17,19 @@
       @selection-change="selectionChange"
       @row-del="rowDel"
     >
-      <template #roleIds="{row}">
-        <el-tag v-for="item in row.roles" :key="item._id">{{item.name}}</el-tag>
-      </template>
       <template #deptId="{row}">
         <span>{{row.dept&&row.dept.name}}</span>
       </template>
       <template #deptIdForm="{row}">
-        <dept-select v-model="row.deptId"></dept-select>
+        <avue-input-tree
+          v-model="row.deptId"
+          placeholder="请选择上级部门"
+          :dic="deptTree"
+          :props="{label:'name',value:'_id'}"
+        ></avue-input-tree>
+      </template>
+      <template #roleIds="{row}">
+        <el-tag v-for="item in row.roles" :key="item._id">{{item.name}}</el-tag>
       </template>
       <template #roleIdsForm="{row}">
         <el-select v-model="row.roleIds" multiple>
@@ -38,8 +43,9 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
-import { getList, create, update, remove } from "@/api/upms/user";
-import { getList as getRoleList } from "@/api/upms/role";
+import { getList, create, update, remove } from "@/api/sys/user";
+import { getList as getRoleList } from "@/api/sys/role";
+import { getTree as getDeptTree } from "@/api/sys/dept";
 
 export default {
   name: "user",
@@ -53,12 +59,16 @@ export default {
         remove
       },
       tableOption,
-      roleList: []
+      roleList: [],
+      deptTree: []
     };
   },
   created() {
     getRoleList().then(res => {
       this.roleList = res.data;
+    });
+    getDeptTree().then(res => {
+      this.deptTree = res.data;
     });
   }
 };

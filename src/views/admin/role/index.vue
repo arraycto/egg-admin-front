@@ -48,8 +48,8 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
-import { getList, create, update, remove } from "@/api/upms/role";
-import { getTree as getMenuTree } from "@/api/admin/menu";
+import { getList, create, update, remove } from "@/api/sys/role";
+import { getTree as getMenuTree } from "@/api/sys/menu";
 
 export default {
   name: "role",

@@ -41,7 +41,7 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
-import { getTree, create, update, remove } from "@/api/admin/menu";
+import { getTree, create, update, remove } from "@/api/sys/menu";
 
 export default {
   name: "navmenu",

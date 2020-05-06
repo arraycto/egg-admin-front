@@ -78,7 +78,6 @@ export const tableOption = {
     {
       label: "权限",
       prop: "permissions",
-      hide: true,
       span: 24
     },
     {

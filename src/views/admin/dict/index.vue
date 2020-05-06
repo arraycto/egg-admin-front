@@ -33,7 +33,7 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
-import { getTree, create, update, remove } from "@/api/admin/dict";
+import { getTree, create, update, remove } from "@/api/sys/dict";
 
 export default {
   name: "dict",

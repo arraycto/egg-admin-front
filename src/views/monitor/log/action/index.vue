@@ -23,7 +23,7 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "../option";
-import { getActionLog } from "@/api/log";
+import { getActionLog } from "@/api/sys/log";
 
 export default {
   name: "log-action",

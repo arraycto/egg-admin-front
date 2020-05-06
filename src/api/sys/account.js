@@ -2,7 +2,7 @@ import request from "@/plugin/axios";
 
 export function userLogin(data) {
   return request({
-    url: "/user/login",
+    url: "/account/login",
     method: "post",
     data
   });
@@ -10,8 +10,22 @@ export function userLogin(data) {
 
 export function resetPassword(data) {
   return request({
-    url: "/user/password/reset",
+    url: "/account/resetPsw",
     method: "put",
     data
+  });
+}
+
+export function getCurrent() {
+  return request({
+    url: "/account/current",
+    method: "get"
+  });
+}
+
+export function getCaptcha() {
+  return request({
+    url: "/account/captcha",
+    method: "get"
   });
 }

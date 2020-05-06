@@ -23,6 +23,7 @@
                 :rules="rules"
                 :model="formLogin"
                 size="default"
+                @submit.native.prevent
               >
                 <el-form-item prop="username">
                   <el-input type="text" v-model="formLogin.username" placeholder="用户名">
@@ -30,37 +31,51 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                  <el-input type="password" v-model="formLogin.password" placeholder="密码">
+                  <el-input
+                    type="password"
+                    v-model="formLogin.password"
+                    placeholder="密码"
+                    show-password
+                  >
                     <i slot="prepend" class="fa fa-keyboard-o"></i>
                   </el-input>
                 </el-form-item>
-                <el-form-item prop="code">
-                  <el-input type="text" v-model="formLogin.code" placeholder="验证码">
+                <el-form-item prop="captcha">
+                  <el-input type="text" v-model="formLogin.captcha" placeholder="验证码">
                     <template slot="append">
-                      <img class="login-code" src="./image/login-code.png" />
+                      <div class="login-code" v-html="captcha" @click="refreshCaptcha"></div>
+                      <!-- <img class="login-code" src="./image/login-code.png" /> -->
                     </template>
                   </el-input>
                 </el-form-item>
-                <el-button size="default" @click="submit" type="primary" class="button-login">登录</el-button>
+                <el-form-item>
+                  <el-button
+                    size="default"
+                    native-type="submit"
+                    @click="submit"
+                    type="primary"
+                    class="button-login"
+                  >登录</el-button>
+                </el-form-item>
               </el-form>
             </el-card>
-            <p class="page-login--options" flex="main:justify cross:center">
+            <!-- <p class="page-login--options" flex="main:justify cross:center">
               <span>
                 <d2-icon name="question-circle" />忘记密码
               </span>
               <span>注册用户</span>
-            </p>
+            </p>-->
             <!-- quick login -->
-            <el-button
+            <!-- <el-button
               class="page-login--quick"
               size="default"
               type="info"
               @click="dialogVisible = true"
-            >快速选择用户（测试功能）</el-button>
+            >快速选择用户（测试功能）</el-button>-->
           </div>
         </div>
         <div class="page-login--content-footer">
-          <p class="page-login--content-footer-locales">
+          <!-- <p class="page-login--content-footer-locales">
             <a
               v-for="language in $languages"
               :key="language.value"
@@ -76,7 +91,7 @@
             <a href="#">帮助</a>
             <a href="#">隐私</a>
             <a href="#">条款</a>
-          </p>
+          </p>-->
         </div>
       </div>
     </div>
@@ -97,6 +112,8 @@
 import dayjs from "dayjs";
 import { mapActions } from "vuex";
 import localeMixin from "@/locales/mixin.js";
+import { getCaptcha } from "@/api/sys/account";
+
 export default {
   mixins: [localeMixin],
   data() {
@@ -126,7 +143,7 @@ export default {
       formLogin: {
         username: "admin",
         password: "123456",
-        code: "v9am"
+        captcha: ""
       },
       // 表单校验
       rules: {
@@ -144,17 +161,19 @@ export default {
             trigger: "blur"
           }
         ],
-        code: [
+        captcha: [
           {
             required: true,
             message: "请输入验证码",
             trigger: "blur"
           }
         ]
-      }
+      },
+      captcha: ""
     };
   },
   mounted() {
+    this.refreshCaptcha();
     this.timeInterval = setInterval(() => {
       this.refreshTime();
     }, 1000);
@@ -176,6 +195,12 @@ export default {
       this.formLogin.password = user.password;
       this.submit();
     },
+    refreshCaptcha() {
+      this.formLogin.captcha = "";
+      getCaptcha().then(res => {
+        this.captcha = res.data;
+      });
+    },
     /**
      * @description 提交表单
      */
@@ -183,16 +208,14 @@ export default {
     submit() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          // 登录
-          // 注意 这里的演示没有传验证码
-          // 具体需要传递的数据请自行修改代码
-          this.login(this.formLogin).then(() => {
-            // 重定向对象不存在则返回顶层路径
-            this.$router.replace(this.$route.query.redirect || "/");
-          });
-        } else {
-          // 登录表单校验失败
-          this.$message.error("表单校验失败，请检查");
+          this.login(this.formLogin)
+            .then(() => {
+              // 重定向对象不存在则返回顶层路径
+              this.$router.replace(this.$route.query.redirect || "/");
+            })
+            .catch(() => {
+              this.refreshCaptcha();
+            });
         }
       });
     }

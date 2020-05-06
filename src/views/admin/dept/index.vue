@@ -35,7 +35,7 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
-import { getTree, create, update, remove } from "@/api/upms/dept";
+import { getTree, create, update, remove } from "@/api/sys/dept";
 
 export default {
   name: "dept",
