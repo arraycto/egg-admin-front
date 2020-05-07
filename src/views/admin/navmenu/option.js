@@ -73,7 +73,8 @@ export const tableOption = {
       label: "排序",
       prop: "sort",
       type: "number",
-      span: 24
+      span: 24,
+      value: 0
     },
     {
       label: "权限",
@@ -85,7 +86,7 @@ export const tableOption = {
       prop: "cache",
       type: "switch",
       span: 24,
-      default: true
+      value: true
     }
   ]
 };
