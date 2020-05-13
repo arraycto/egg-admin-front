@@ -2,6 +2,7 @@ import store from "@/store";
 import axios from "axios";
 import { Message } from "element-ui";
 import util from "@/libs/util";
+import qs from "qs";
 // 创建一个错误
 function errorCreate(msg) {
   const error = new Error(msg);
@@ -48,6 +49,12 @@ service.interceptors.request.use(
     const token = util.cookies.get("token") || "";
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
     config.headers["Authorization"] = "Bearer " + token;
+    if (config.method === "get") {
+      // 如果是get请求，且params是数组类型如arr=[1,2]，则转换成arr=1&arr=2
+      config.paramsSerializer = function(params) {
+        return qs.stringify(params, { arrayFormat: "repeat" });
+      };
+    }
     return config;
   },
   error => {

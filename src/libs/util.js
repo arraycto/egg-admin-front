@@ -3,6 +3,7 @@ import db from "./util.db";
 import log from "./util.log";
 import layoutHeaderAside from "@/layout/header-aside";
 import pageIframe from "@/layout/page-iframe";
+import pageMain from "@/layout/page-main";
 
 const util = {
   cookies,
@@ -55,15 +56,18 @@ export const _import = file => {
 
 export const generateRoutes = (menuArr, parent = { path: "" }) => {
   return menuArr.map(menu => {
+    menu.path = parent.path + menu.path;
+    let path = menu.path;
+    let component = null;
+    let url = "";
     const children =
       menu.children && menu.children.length
         ? generateRoutes(menu.children, menu)
         : [];
-    let path = parent.path + menu.path;
-    let component = null;
-    let url = "";
     if (menu.component && menu.component === "Layout") {
       component = layoutHeaderAside;
+    } else if (menu.component && menu.component === "Main") {
+      component = pageMain;
     } else if (menu.component && menu.component === "Iframe") {
       path = "/page-iframe/" + menu.name;
       url = menu.path;
@@ -77,7 +81,6 @@ export const generateRoutes = (menuArr, parent = { path: "" }) => {
       children,
       component,
       meta: {
-        auth: menu.auth,
         title: menu.title,
         cache: menu.cache,
         url
