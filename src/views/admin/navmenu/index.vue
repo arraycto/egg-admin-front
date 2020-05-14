@@ -34,6 +34,19 @@
       <template #menu="{row}">
         <el-button type="text" size="small" icon="el-icon-plus" @click="addMenu(row)">新增下级</el-button>
       </template>
+      <template #componentForm="{row}">
+        <el-select
+          v-model="row.component"
+          filterable
+          allow-create
+          default-first-option
+          placeholder="请选择或输入前端组件"
+        >
+          <el-option label="Layout" value="Layout"></el-option>
+          <el-option label="Main" value="Main"></el-option>
+          <el-option label="Iframe" value="Iframe"></el-option>
+        </el-select>
+      </template>
     </avue-crud>
   </d2-container>
 </template>
@@ -56,6 +69,25 @@ export default {
       },
       tableOption
     };
+  },
+  watch: {
+    formData: {
+      handler(val) {
+        const { component, type } = val;
+        tableOption.column.forEach(item => {
+          if (item.prop === "url") {
+            item.display = component === "Iframe";
+          }
+          if (
+            ["icon", "path", "component", "name", "cache"].includes(item.prop)
+          ) {
+            item.display = type === "0";
+          }
+        });
+      },
+      deep: true,
+      immediate: true
+    }
   },
   computed: {
     menuTree() {

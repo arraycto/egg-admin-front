@@ -31,13 +31,6 @@ export const tableOption = {
       ]
     },
     {
-      label: "图标",
-      prop: "icon",
-      slot: true,
-      formslot: true,
-      span: 24
-    },
-    {
       label: "类型",
       prop: "type",
       type: "select",
@@ -46,6 +39,7 @@ export const tableOption = {
         { label: "按钮", value: "1" }
       ],
       span: 24,
+      value: "0",
       rules: [
         {
           required: true,
@@ -55,6 +49,14 @@ export const tableOption = {
       ]
     },
     {
+      label: "图标",
+      prop: "icon",
+      slot: true,
+      formslot: true,
+      display: true,
+      span: 24
+    },
+    {
       label: "路由路径",
       prop: "path",
       span: 24
@@ -62,11 +64,18 @@ export const tableOption = {
     {
       label: "前端组件",
       prop: "component",
+      formslot: true,
       span: 24
     },
     {
       label: "组件名",
       prop: "name",
+      span: 24
+    },
+    {
+      label: "Iframe地址",
+      prop: "url",
+      display: false,
       span: 24
     },
     {

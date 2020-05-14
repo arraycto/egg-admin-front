@@ -46,35 +46,28 @@ export const title = titleText => {
 };
 
 export const _import = file => {
-  const env = {
+  const envMap = {
     development: file => require("@/views/" + file).default,
     production: file => () => import("@/views/" + file)
   };
   // return env[process.env.NODE_ENV](file);
-  return env.production(file);
+  return envMap.production(file);
 };
 
 export const generateRoutes = (menuArr, parent = { path: "" }) => {
+  const componentMap = {
+    Layout: layoutHeaderAside,
+    Main: pageMain,
+    Iframe: pageIframe
+  };
   return menuArr.map(menu => {
     menu.path = parent.path + menu.path;
     let path = menu.path;
-    let component = null;
-    let url = "";
+    let component = componentMap[menu.component] || _import(menu.component);
     const children =
       menu.children && menu.children.length
         ? generateRoutes(menu.children, menu)
         : [];
-    if (menu.component && menu.component === "Layout") {
-      component = layoutHeaderAside;
-    } else if (menu.component && menu.component === "Main") {
-      component = pageMain;
-    } else if (menu.component && menu.component === "Iframe") {
-      path = "/page-iframe/" + menu.name;
-      url = menu.path;
-      component = pageIframe;
-    } else if (menu.component) {
-      component = _import(menu.component);
-    }
     const result = {
       ...menu,
       path,
@@ -83,7 +76,7 @@ export const generateRoutes = (menuArr, parent = { path: "" }) => {
       meta: {
         title: menu.title,
         cache: menu.cache,
-        url
+        url: menu.url
       }
     };
     return result;
