@@ -148,11 +148,11 @@ module.exports = {
       .set('@api', resolve('src/api'))
     // 判断环境加入模拟数据
     const entry = config.entry('app')
-    // if (process.env.VUE_APP_BUILD_MODE !== 'NOMOCK') {
-    //   entry
-    //     .add('@/mock')
-    //     .end()
-    // }
+    if (process.env.VUE_APP_BUILD_MODE === 'MOCK') {
+      entry
+        .add('@/mock')
+        .end()
+    }
     // 分析工具
     if (process.env.npm_config_report) {
       config

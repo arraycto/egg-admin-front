@@ -1,7 +1,7 @@
 <template>
   <el-submenu :index="menu.name || uniqueId">
     <template slot="title">
-      <d2-icon-svg :name="menu.icon||''" />
+      <d2-icon :name="menu.icon||''" />
       <span slot="title">{{menu.title}}</span>
     </template>
     <template v-for="(child, childIndex) in menu.children">
