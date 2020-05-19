@@ -3,7 +3,8 @@
   "version": "1.8.0",
   "scripts": {
     "dev": "vue-cli-service serve --open",
-    "mock": "vue-cli-service serve --open --mode mock",
+    "dev:mock": "vue-cli-service serve --open --mode mock",
+    "dev:github": "vue-cli-service serve --open --mode github",
     "build": "vue-cli-service build",
     "build:github": "NODE_OPTIONS=--max_old_space_size=4096 vue-cli-service build --mode github",
     "lint": "vue-cli-service lint --fix",

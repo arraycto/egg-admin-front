@@ -21,6 +21,10 @@ Mock.get(/api\/sys\/info/, {
   }
 });
 
+Mock.get(/api\/account\/captcha/, {
+  data: `<center style="width:120px;height:40px;font-size:36px;">asdf</center>`
+});
+
 const menus = [
   {
     cache: false,
