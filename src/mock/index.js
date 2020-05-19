@@ -37,7 +37,7 @@ const menus = [
         icon: "bars",
         name: "navmenu",
         parentId: "5d2d6d6814bc421d10003a55",
-        path: "/admin/menu",
+        path: "/menu",
         permissions: "",
         sort: 1,
         title: "菜单管理",
