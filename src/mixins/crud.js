@@ -4,7 +4,7 @@ export default {
       // 设置属性
       crudOption: {
         rowKey: "_id", // 删除使用的key(id/_id/uuid/...)
-        activated: true, // 此页面是否在激活（进入）时，查询数据列表?
+        created: true, // 此页面是否在激活（进入）时，查询数据列表?
         getList: null, // 获取数据列表方法
         create: null, // 添加数据方法
         update: null, // 编辑数据方法
@@ -27,7 +27,7 @@ export default {
   },
   created() {
     this.page = this.pageDefault;
-    if (this.crudOption.activated) {
+    if (this.crudOption.created) {
       this.getDataList();
     }
   },
@@ -35,7 +35,7 @@ export default {
     // 获取数据列表
     getDataList() {
       this.tableLoading = true;
-      this.crudOption
+      return this.crudOption
         .getList({
           ...this.page,
           ...this.searchForm
@@ -87,7 +87,7 @@ export default {
      **/
     handleUpdate(row, index, done, loading) {
       let obj = this.filterObj(row);
-      this.crudOption
+      return this.crudOption
         .update(obj[this.crudOption.rowKey], obj)
         .then(res => {
           this.$message({
@@ -107,7 +107,7 @@ export default {
      * @param {Object} row 行数据
      */
     rowDel(row) {
-      this.$confirm("确认进行删除操作？", "提示", {
+      return this.$confirm("确认进行删除操作？", "提示", {
         type: "warning"
       })
         .then(() => {
@@ -154,7 +154,7 @@ export default {
       if (!length) {
         return this.$message.warning("请选择删除项");
       }
-      this.$confirm(`确认删除所选的${length}条数据？`, "提示", {
+      return this.$confirm(`确认删除所选的${length}条数据？`, "提示", {
         type: "warning"
       })
         .then(() => {

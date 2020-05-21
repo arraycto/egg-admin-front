@@ -49,10 +49,11 @@
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
 import { getList, create, update, remove } from "@/api/sys/role";
-import { getTree as getMenuTree } from "@/api/sys/menu";
+import { getTree as getMenuTree , getMenu} from "@/api/sys/menu";
+import { mapActions } from "vuex";
 
 export default {
-  name: "role",
+  name: "upms-role",
   mixins: [crudMixin],
   data() {
     return {
@@ -73,6 +74,7 @@ export default {
     });
   },
   methods: {
+    ...mapActions("d2admin/menu", ["getMenu"]),
     async openMenu(row) {
       this.menuVisible = true;
       await this.$nextTick();
@@ -85,6 +87,7 @@ export default {
     async saveMenu() {
       const { _id, menuIds } = this.formData;
       await this.handleUpdate({ _id, menuIds });
+      this.getMenu(true);
       this.menuVisible = false;
     }
   }

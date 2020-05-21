@@ -68,6 +68,13 @@ export const tableOption = {
       span: 24
     },
     {
+      label: "携带参数",
+      prop: "query",
+      display: false,
+      hide: true,
+      span: 24
+    },
+    {
       label: "组件名",
       prop: "name",
       span: 24
@@ -76,7 +83,17 @@ export const tableOption = {
       label: "Iframe地址",
       prop: "url",
       display: false,
-      span: 24
+      hide: true,
+      span: 18
+    },
+    {
+      label: "新窗口打开",
+      prop: "blank",
+      type: "switch",
+      value: false,
+      display: false,
+      hide: true,
+      span: 6
     },
     {
       label: "排序",

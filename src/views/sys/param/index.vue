@@ -22,16 +22,19 @@
 
 <script>
 import crudMixin from "@/mixins/crud";
-import { tableOption } from "../option";
-import { getLoginLog } from "@/api/sys/log";
+import { tableOption } from "./option";
+import { getList, create, update, remove } from "@/api/sys/param";
 
 export default {
-  name: "log-login",
+  name: "sys-param",
   mixins: [crudMixin],
   data() {
     return {
       crudOption: {
-        getList: getLoginLog
+        getList,
+        create,
+        update,
+        remove
       },
       tableOption
     };

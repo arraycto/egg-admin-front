@@ -76,7 +76,8 @@ export const generateRoutes = (menuArr, parent = { path: "" }) => {
       meta: {
         title: menu.title,
         cache: menu.cache,
-        url: menu.url
+        url: menu.url,
+        blank: menu.blank
       }
     };
     return result;

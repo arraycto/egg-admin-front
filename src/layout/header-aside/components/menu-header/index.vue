@@ -17,7 +17,7 @@
             v-for="(item, index) in header"
             :index="item.path"
             :key="index"
-            @click="headerMenuClick(item)"
+            @click="menuClick(item)"
           >
             <d2-icon :name="item.icon"></d2-icon>&nbsp;
             <span>{{item.title}}</span>
@@ -49,7 +49,6 @@
 <script>
 import { throttle } from "lodash";
 import { mapState } from "vuex";
-import util from "@/libs/util.js";
 import menuMixin from "../mixin/menu";
 
 export default {
@@ -83,13 +82,6 @@ export default {
     }
   },
   methods: {
-    headerMenuClick(menu) {
-      if (menu.children) {
-        this.$store.commit("d2admin/menu/asideSet", menu.children || []);
-      } else {
-        this.handleMenuSelect(menu);
-      }
-    },
     scroll(direction) {
       if (direction === "left") {
         // 向右滚动

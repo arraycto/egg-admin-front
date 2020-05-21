@@ -22,19 +22,30 @@
 
 <script>
 import crudMixin from "@/mixins/crud";
-import { tableOption } from "../option";
-import { getActionLog } from "@/api/sys/log";
+import { tableOption } from "./option";
+import { getList } from "@/api/sys/log";
 
 export default {
-  name: "log-action",
+  name: "sys-log",
   mixins: [crudMixin],
   data() {
     return {
       crudOption: {
-        getList: getActionLog
+        created: false,
+        getList: null
       },
       tableOption
     };
+  },
+  watch: {
+    $route: {
+      handler(val) {
+        console.log(val.query.type);
+        this.crudOption.getList = getList[val.query.type];
+        this.getDataList();
+      },
+      immediate: true
+    }
   }
 };
 </script>

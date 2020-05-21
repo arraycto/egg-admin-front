@@ -43,5 +43,16 @@ export default {
     Vue.use(pluginError);
     Vue.use(pluginLog);
     Vue.use(pluginOpen);
+
+    // 指令
+    Vue.directive("perm", {
+      bind: function(el, binding, vnode) {
+        const permissions =
+          vnode.componentInstance.$store.state.d2admin.menu.permissions;
+        if (!permissions.some(item => item === binding.value)) {
+          el.style.display = "none";
+        }
+      }
+    });
   }
 };

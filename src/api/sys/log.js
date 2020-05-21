@@ -18,3 +18,8 @@ export function getErrorLog(params) {
     params
   });
 }
+export const getList = {
+  login: getLoginLog,
+  action: getActionLog,
+  error: getErrorLog
+};

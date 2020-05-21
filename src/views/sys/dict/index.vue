@@ -17,16 +17,14 @@
       @selection-change="selectionChange"
       @row-del="rowDel"
     >
-      <template #parentIdForm="{row}">
-        <avue-input-tree
-          v-model="row.parentId"
-          placeholder="请选择上级部门"
-          :dic="deptTree"
-          :props="{label:'name',value:'_id'}"
-        ></avue-input-tree>
-      </template>
       <template #menu="{row}">
-        <el-button type="text" size="small" icon="el-icon-plus" @click="addDept(row)">新增下级</el-button>
+        <el-button
+          type="text"
+          size="small"
+          icon="el-icon-plus"
+          @click="addDictItem(row)"
+          v-if="row.parentId==='0'"
+        >新增字典项</el-button>
       </template>
     </avue-crud>
   </d2-container>
@@ -35,10 +33,10 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
-import { getTree, create, update, remove } from "@/api/sys/dept";
+import { getTree, create, update, remove } from "@/api/sys/dict";
 
 export default {
-  name: "dept",
+  name: "sys-dict",
   mixins: [crudMixin],
   data() {
     return {
@@ -51,22 +49,12 @@ export default {
       tableOption
     };
   },
-  computed: {
-    deptTree() {
-      return [
-        {
-          name: "一级部门",
-          _id: "0",
-          children: this.tableData
-        }
-      ];
-    }
-  },
   methods: {
-    async addDept(row) {
+    async addDictItem(row) {
       this.$refs.crud.rowAdd();
       await this.$nextTick();
       this.formData.parentId = row._id;
+      this.formData.type = row.type;
     }
   }
 };

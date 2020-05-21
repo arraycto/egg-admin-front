@@ -1,27 +1,7 @@
-import { uniqueId } from "lodash";
 // 设置文件
 import setting from "@/setting.js";
-import { getMenu } from "@/api/sys/menu.js";
+import { getMenu, getPermissions } from "@/api/sys/menu.js";
 import { generateRoutes } from "@/libs/util.js";
-
-/**
- * 给菜单数据补充上 path 字段
- * https://github.com/d2-projects/d2-admin/issues/209
- * @param {Array} menu 原始的菜单数据
- */
-function supplementMenuPath(menu) {
-  return menu.map(e => {
-    return {
-      ...e,
-      path: e.path || uniqueId("d2-menu-empty-"),
-      ...(e.children
-        ? {
-            children: supplementMenuPath(e.children)
-          }
-        : {})
-    };
-  });
-}
 
 export default {
   namespaced: true,
@@ -31,7 +11,10 @@ export default {
     // 侧栏菜单
     aside: [],
     // 侧边栏收缩
-    asideCollapse: setting.menu.asideCollapse
+    asideCollapse: setting.menu.asideCollapse,
+    // 权限
+    permissions: [],
+    permission: {}
   },
   actions: {
     /**
@@ -102,13 +85,15 @@ export default {
         resolve();
       });
     },
-    getMenu({ state, commit }) {
+    getMenu({ state, commit }, force) {
       return new Promise(async resolve => {
-        if (!state.header || !state.header.length) {
-          const res = await getMenu();
-          let menu = generateRoutes(res);
-          commit("headerSet", menu);
-          commit("d2admin/search/init", menu, { root: true });
+        if (!state.header || !state.header.length || force) {
+          const menu = await getMenu();
+          let routes = generateRoutes(menu);
+          commit("headerSet", routes);
+          commit("d2admin/search/init", routes, { root: true });
+          const permissions = await getPermissions();
+          commit("permissionsSet", permissions);
         }
         resolve(state.header);
       });
@@ -122,7 +107,7 @@ export default {
      */
     headerSet(state, menu) {
       // store 赋值
-      state.header = supplementMenuPath(menu);
+      state.header = menu;
     },
     /**
      * @description 设置侧边栏菜单
@@ -131,7 +116,21 @@ export default {
      */
     asideSet(state, menu) {
       // store 赋值
-      state.aside = supplementMenuPath(menu);
+      state.aside = menu;
+    },
+    /**
+     * @description 设置权限
+     * @param {Object} state state
+     * @param {Array} per permissions
+     */
+    permissionsSet(state, perms = []) {
+      // store 赋值
+      state.permissions = perms;
+      const permission = {};
+      perms.forEach(item => {
+        permission[item] = true;
+      });
+      state.permission = permission;
     }
   }
 };

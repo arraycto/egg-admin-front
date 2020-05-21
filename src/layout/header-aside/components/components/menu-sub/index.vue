@@ -10,7 +10,7 @@
         :menu="child"
         :key="childIndex"
       />
-      <d2-layout-header-aside-menu-item v-else :menu="child" :key="childIndex" />
+      <d2-layout-header-aside-menu-item v-else :menu="child" :key="childIndex" @click="$emit('click',$event)"/>
     </template>
   </el-submenu>
 </template>

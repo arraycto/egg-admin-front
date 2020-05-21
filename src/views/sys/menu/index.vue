@@ -9,7 +9,7 @@
       :option="tableOption"
       @current-change="pageCurrentChange"
       @size-change="pageSizeChange"
-      @row-update="handleUpdate"
+      @row-update="handleUpdateHook"
       @row-save="handleSave"
       @search-change="searchChange"
       @search-reset="searchReset"
@@ -32,7 +32,13 @@
         <d2-icon-select v-model="row.icon"></d2-icon-select>
       </template>
       <template #menu="{row}">
-        <el-button type="text" size="small" icon="el-icon-plus" @click="addMenu(row)">新增下级</el-button>
+        <el-button
+          type="text"
+          size="small"
+          icon="el-icon-plus"
+          @click="addMenu(row)"
+          v-perm="'sys_menu_save'"
+        >新增下级</el-button>
       </template>
       <template #componentForm="{row}">
         <el-select
@@ -55,9 +61,10 @@
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
 import { getTree, create, update, remove } from "@/api/sys/menu";
+import { mapActions } from "vuex";
 
 export default {
-  name: "navmenu",
+  name: "sys-menu",
   mixins: [crudMixin],
   data() {
     return {
@@ -75,13 +82,23 @@ export default {
       handler(val) {
         const { component, type } = val;
         tableOption.column.forEach(item => {
-          if (item.prop === "url") {
-            item.display = component === "Iframe";
-          }
-          if (
-            ["icon", "path", "component", "name", "cache"].includes(item.prop)
-          ) {
-            item.display = type === "0";
+          switch (item.prop) {
+            case "query":
+              item.display = component && component.includes("/");
+              break;
+            case "url":
+            case "blank":
+              item.display = component === "Iframe";
+              break;
+            case "icon":
+            case "path":
+            case "component":
+            case "name":
+            case "cache":
+              item.display = type === "0";
+              break;
+            default:
+              break;
           }
         });
       },
@@ -101,10 +118,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions("d2admin/menu", ["getMenu"]),
     async addMenu(row) {
       this.$refs.crud.rowAdd();
       await this.$nextTick();
       this.formData.parentId = row._id;
+    },
+    async handleUpdateHook(...arg) {
+      await this.handleUpdate.apply(this, arg);
+      this.getMenu(true);
     }
   }
 };

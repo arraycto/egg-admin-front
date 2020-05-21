@@ -5,15 +5,15 @@
       :unique-opened="true"
       :default-active="active"
       ref="menu"
-      @select="handleMenuSelect"
     >
       <template v-for="(menu, menuIndex) in aside">
         <d2-layout-header-aside-menu-sub
           v-if="menu.children&&menu.children.length"
           :menu="menu"
           :key="menuIndex"
+          @click="menuClick"
         />
-        <d2-layout-header-aside-menu-item v-else :menu="menu" :key="menuIndex" />
+        <d2-layout-header-aside-menu-item v-else :menu="menu" :key="menuIndex" @click="menuClick"/>
       </template>
     </el-menu>
     <div

@@ -1,5 +1,5 @@
 <template>
-  <el-menu-item :index="menu.path || uniqueId">
+  <el-menu-item :index="menu.path || uniqueId" @click="$emit('click',menu)">
     <d2-icon :name="menu.icon||''"/>
     <span slot="title">{{menu.title}}</span>
   </el-menu-item>
