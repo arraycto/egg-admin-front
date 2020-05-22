@@ -25,6 +25,14 @@ Mock.get(/api\/account\/captcha/, {
   data: `<center style="width:120px;height:40px;font-size:36px;">asdf</center>`
 });
 
+Mock.get(/api\/menu\/permissions\/get/, [
+  "sys_menu_list",
+  "sys_menu_info",
+  "sys_menu_save",
+  "sys_menu_update",
+  "sys_menu_delete"
+]);
+
 const menus = [
   {
     cache: false,
@@ -32,10 +40,10 @@ const menus = [
       {
         cache: true,
         children: [],
-        component: "admin/navmenu",
+        component: "sys/menu",
         createTime: "2018-12-29 06:19:46",
         icon: "bars",
-        name: "navmenu",
+        name: "sys-menu",
         parentId: "5d2d6d6814bc421d10003a55",
         path: "/menu",
         permissions: "",
@@ -50,9 +58,9 @@ const menus = [
     component: "Layout",
     createTime: "2018-12-29 06:19:47",
     icon: "cog",
-    name: "admin",
+    name: "sys",
     parentId: "0",
-    path: "/admin",
+    path: "/sys",
     permissions: "",
     sort: 1,
     title: "系统设置",
