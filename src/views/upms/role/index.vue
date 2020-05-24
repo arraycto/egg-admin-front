@@ -49,7 +49,7 @@
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
 import { getList, create, update, remove } from "@/api/sys/role";
-import { getTree as getMenuTree , getMenu} from "@/api/sys/menu";
+import { getTree as getMenuTree } from "@/api/sys/menu";
 import { mapActions } from "vuex";
 
 export default {

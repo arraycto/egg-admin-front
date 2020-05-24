@@ -7,6 +7,7 @@
       :data="tableData"
       :table-loading="tableLoading"
       :option="tableOption"
+      :permission="perm"
       @current-change="pageCurrentChange"
       @size-change="pageSizeChange"
       @row-update="handleUpdateHook"
@@ -61,7 +62,7 @@
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
 import { getTree, create, update, remove } from "@/api/sys/menu";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "sys-menu",
@@ -107,6 +108,14 @@ export default {
     }
   },
   computed: {
+    ...mapState("d2admin/menu", ["permission"]),
+    perm() {
+      return {
+        addBtn: !!this.permission.sys_menu_save,
+        editBtn: !!this.permission.sys_menu_update,
+        delBtn: !!this.permission.sys_menu_delete
+      };
+    },
     menuTree() {
       return [
         {
