@@ -55,7 +55,7 @@ const menus = [
         _id: "5d2e832314bc4247ac006727"
       }
     ],
-    component: "Layout",
+    component: "Main",
     createTime: "2018-12-29 06:19:47",
     icon: "cog",
     name: "sys",
