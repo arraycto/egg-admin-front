@@ -22,7 +22,7 @@ Mock.get(/api\/sys\/info/, {
 });
 
 Mock.get(/api\/account\/captcha/, {
-  data: `<center style="width:120px;height:40px;font-size:36px;">asdf</center>`
+  data: `<center style="width:120px;height:32px;font-size:32px;">asdf</center>`
 });
 
 Mock.get(/api\/menu\/permissions\/get/, [
