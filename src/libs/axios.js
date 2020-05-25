@@ -1,7 +1,7 @@
 import store from "@/store";
 import axios from "axios";
 import { Message } from "element-ui";
-import util from "@/libs/util";
+import { log, cookies } from "@/libs/util";
 import qs from "qs";
 // 创建一个错误
 function errorCreate(msg) {
@@ -22,7 +22,7 @@ function errorLog(error) {
   });
   // 打印到控制台
   if (process.env.NODE_ENV === "development") {
-    util.log.danger(">>>>>> Error >>>>>>");
+    log.danger(">>>>>> Error >>>>>>");
     console.log(error);
   }
   // 显示提示
@@ -46,7 +46,7 @@ window.axios = service;
 service.interceptors.request.use(
   config => {
     // 在请求发送之前做一些处理
-    const token = util.cookies.get("token") || "";
+    const token = cookies.get("token") || "";
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
     config.headers["Authorization"] = "Bearer " + token;
     if (config.method === "get") {

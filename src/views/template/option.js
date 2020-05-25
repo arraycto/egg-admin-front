@@ -9,7 +9,7 @@ export const tableOption = {
     },
     {
       label: "内容",
-      prop: "content"
+      prop: "value"
     }
   ]
 };

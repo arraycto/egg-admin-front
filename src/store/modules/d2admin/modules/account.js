@@ -1,5 +1,5 @@
 import { Message, MessageBox } from "element-ui";
-import util from "@/libs/util.js";
+import { cookies } from "@/libs/util";
 import router from "@/router";
 import { userLogin } from "@api/sys/account";
 
@@ -23,8 +23,8 @@ export default {
             // uuid 是用户身份唯一标识 用户注册的时候确定 并且不可改变 不可重复
             // token 代表用户当前登录状态 建议在网络请求中携带 token
             // 如有必要 token 需要定时更新，默认保存一天
-            util.cookies.set("uuid", res.info._id);
-            util.cookies.set("token", res.token);
+            cookies.set("uuid", res.info._id);
+            cookies.set("token", res.token);
             // 设置 vuex 用户信息
             await dispatch("d2admin/user/set", res.info, { root: true });
             // 用户登录后从持久化数据加载一系列的设置
@@ -49,8 +49,8 @@ export default {
        */
       async function logout() {
         // 删除cookie
-        util.cookies.remove("token");
-        util.cookies.remove("uuid");
+        cookies.remove("token");
+        cookies.remove("uuid");
         // 清空 vuex 用户信息
         await dispatch("d2admin/user/set", {}, { root: true });
         // 跳转路由

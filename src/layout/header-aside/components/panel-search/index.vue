@@ -1,15 +1,12 @@
 <template>
-  <div
-    class="panel-search"
-    flex="dir:top">
+  <div class="panel-search" flex="dir:top">
     <div
       class="panel-search__input-group"
       flex-box="0"
       flex="dir:top main:center cross:center"
-      @click.self="handlePanelClick">
-      <d2-icon-svg
-        class="panel-search__logo"
-        name="d2-admin-text"/>
+      @click.self="handlePanelClick"
+    >
+      <d2-icon-svg class="panel-search__logo" name="d2-admin-text" />
       <el-autocomplete
         class="panel-search__input"
         ref="input"
@@ -20,10 +17,9 @@
         :trigger-on-focus="false"
         :clearable="true"
         @keydown.esc.native="handleEsc"
-        @select="handleSelect">
-        <d2-panel-search-item
-          slot-scope="{ item }"
-          :item="item"/>
+        @select="handleSelect"
+      >
+        <d2-panel-search-item slot-scope="{ item }" :item="item" />
       </el-autocomplete>
       <div class="panel-search__tip">
         您可以使用快捷键
@@ -33,10 +29,7 @@
         关闭
       </div>
     </div>
-    <div
-      v-if="resultsList.length > 0"
-      class="panel-search__results-group"
-      flex-box="1">
+    <div v-if="resultsList.length > 0" class="panel-search__results-group" flex-box="1">
       <el-card>
         <div class="panel-search__results-group-inner">
           <d2-panel-search-item
@@ -44,7 +37,8 @@
             :key="index"
             :item="item"
             :hover-mode="true"
-            @click.native="handleResultsGroupItemClick(item.path)"/>
+            @click.native="handleResultsGroupItemClick(item)"
+          />
         </div>
       </el-card>
     </div>
@@ -52,51 +46,49 @@
 </template>
 
 <script>
-import Fuse from 'fuse.js'
-import { mapState } from 'vuex'
-import mixin from '../mixin/menu'
+import Fuse from "fuse.js";
+import { mapState } from "vuex";
+import menuMixin from "@/mixins/menu";
 export default {
-  mixins: [
-    mixin
-  ],
+  mixins: [menuMixin],
   components: {
-    'd2-panel-search-item': () => import('./components/panel-search-item/index.vue')
+    "d2-panel-search-item": () =>
+      import("./components/panel-search-item/index.vue")
   },
-  data () {
+  data() {
     return {
-      searchText: '',
+      searchText: "",
       results: []
-    }
+    };
   },
   computed: {
-    ...mapState('d2admin/search', [
-      'hotkey',
-      'pool'
-    ]),
+    ...mapState("d2admin/search", ["hotkey", "pool"]),
     // 这份数据是展示在搜索面板下面的
-    resultsList () {
-      return (this.results.length === 0 && this.searchText === '') ? this.pool.map(e => ({
-        value: e.fullTitle,
-        ...e
-      })) : this.results
+    resultsList() {
+      return this.results.length === 0 && this.searchText === ""
+        ? this.pool.map(e => ({
+            value: e.fullTitle,
+            ...e
+          }))
+        : this.results;
     }
   },
   methods: {
     /**
      * @description 过滤选项 这个方法在每次输入框的值发生变化时会触发
      */
-    querySearch (queryString, callback) {
-      var pool = this.pool
-      const results = this.query(queryString ? pool : [], queryString)
-      this.results = results
-      callback(results)
+    querySearch(queryString, callback) {
+      var pool = this.pool;
+      const results = this.query(queryString ? pool : [], queryString);
+      this.results = results;
+      callback(results);
     },
     /**
      * @description 指定的数据源中根据指定的查询字符串过滤数据
      * @param {Object} pool 需要过滤的数据
      * @param {String} queryString 查询字符串
      */
-    query (pool, queryString) {
+    query(pool, queryString) {
       return new Fuse(pool, {
         shouldSort: true,
         tokenize: true,
@@ -105,83 +97,80 @@ export default {
         distance: 100,
         maxPatternLength: 32,
         minMatchCharLength: 1,
-        keys: [
-          'fullTitle',
-          'path'
-        ]
+        keys: ["fullTitle", "path"]
       })
         .search(queryString)
         .map(e => ({
           value: e.fullTitle,
           ...e
-        }))
+        }));
     },
     /**
      * @description 聚焦输入框
      */
-    focus () {
-      this.input = ''
+    focus() {
+      this.input = "";
       setTimeout(() => {
         if (this.$refs.input) {
-          this.$refs.input.focus()
+          this.$refs.input.focus();
         }
         // 还原
-        this.searchText = ''
-        this.results = []
-      }, 500)
+        this.searchText = "";
+        this.results = [];
+      }, 500);
     },
     /**
      * @description 接收用户在列表中选择项目的事件
      */
-    handleResultsGroupItemClick (path) {
+    handleResultsGroupItemClick(item) {
       // 如果用户选择的就是当前页面 就直接关闭搜索面板
-      if (path === this.$route.path) {
-        this.handleEsc()
-        return
+      if (item.path === this.$route.path) {
+        this.handleEsc();
+        return;
       }
       // 用户选择的是其它页面
-      this.handleMenuSelect(path)
+      this.menuClick(item);
     },
     /**
      * @description 接收用户在下拉菜单中选中事件
      */
-    handleSelect ({ path }) {
+    handleSelect(item) {
       // 如果用户选择的就是当前页面 就直接关闭搜索面板
-      if (path === this.$route.path) {
-        this.handleEsc()
-        return
+      if (item.path === this.$route.path) {
+        this.handleEsc();
+        return;
       }
       // 用户选择的是其它页面
       this.$nextTick(() => {
-        this.handleMenuSelect(path)
-      })
+        this.menuClick(item);
+      });
     },
     /**
      * @augments 关闭输入框的下拉菜单
      */
-    closeSuggestion () {
+    closeSuggestion() {
       if (this.$refs.input.activated) {
-        this.$refs.input.suggestions = []
-        this.$refs.input.activated = false
+        this.$refs.input.suggestions = [];
+        this.$refs.input.activated = false;
       }
     },
     /**
      * @augments 接收用户点击空白区域的关闭
      */
-    handlePanelClick () {
-      this.handleEsc()
+    handlePanelClick() {
+      this.handleEsc();
     },
     /**
      * @augments 接收用户触发的关闭
      */
-    handleEsc () {
-      this.closeSuggestion()
+    handleEsc() {
+      this.closeSuggestion();
       this.$nextTick(() => {
-        this.$emit('close')
-      })
+        this.$emit("close");
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

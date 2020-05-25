@@ -240,7 +240,7 @@
           height: 41px;
           // 多页面控制器
           .d2-multiple-page-control-group {
-            padding-right: 20px;
+            // padding-right: 20px;
             .d2-multiple-page-control-content {
               overflow: auto;
               position: relative;
@@ -281,7 +281,7 @@
             .d2-container-full {
               position: absolute;
               top: 0px;
-              right: 20px;
+              right: 0px;
               bottom: 0px;
               left: 0px;
               display: flex;
@@ -305,7 +305,7 @@
             .d2-container-full-bs {
               position: absolute;
               top: 0px;
-              right: 20px;
+              right: 0px;
               bottom: 0px;
               left: 0px;
               display: flex;
@@ -331,7 +331,7 @@
             .d2-container-ghost {
               position: absolute;
               top: 0px;
-              right: 20px;
+              right: 0px;
               bottom: 0px;
               left: 0px;
               display: flex;
@@ -357,7 +357,7 @@
             .d2-container-ghost-bs {
               position: absolute;
               top: 0px;
-              right: 20px;
+              right: 0px;
               bottom: 0px;
               left: 0px;
               display: flex;
@@ -383,7 +383,7 @@
             .d2-container-card {
               position: absolute;
               top: 0px;
-              right: 20px;
+              right: 0px;
               bottom: 0px;
               left: 0px;
               display: flex;
@@ -413,7 +413,7 @@
             .d2-container-card-bs {
               position: absolute;
               top: 0px;
-              right: 20px;
+              right: 0px;
               bottom: 0px;
               left: 0px;
               display: flex;

@@ -23,7 +23,7 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
-import { getList, create, update, remove } from "@/api/test";
+import { getList, create, update, remove } from "@/api/sys/param";
 
 export default {
   name: "sys-template",

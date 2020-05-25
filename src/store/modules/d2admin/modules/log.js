@@ -1,6 +1,6 @@
-import dayjs from 'dayjs'
-import { get } from 'lodash'
-import util from '@/libs/util.js'
+import dayjs from "dayjs";
+import { get } from "lodash";
+import { cookies } from "@/libs/util";
 
 export default {
   namespaced: true,
@@ -18,15 +18,15 @@ export default {
      * @description 返回现存 log (all) 的条数
      * @param {*} state vuex state
      */
-    length (state) {
-      return state.log.length
+    length(state) {
+      return state.log.length;
     },
     /**
      * @description 返回现存 log (error) 的条数
      * @param {*} state vuex state
      */
-    lengthError (state) {
-      return state.log.filter(log => log.type === 'danger').length
+    lengthError(state) {
+      return state.log.filter(log => log.type === "danger").length;
     }
   },
   actions: {
@@ -37,24 +37,24 @@ export default {
      * @param {String} param type {String} 类型
      * @param {Object} payload meta {Object} 附带的信息
      */
-    push ({ rootState, commit }, { message, type = 'info', meta }) {
-      commit('push', {
+    push({ rootState, commit }, { message, type = "info", meta }) {
+      commit("push", {
         message,
         type,
-        time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
         meta: {
           // 当前用户信息
           user: rootState.d2admin.user.info,
           // 当前用户的 uuid
-          uuid: util.cookies.get('uuid'),
+          uuid: cookies.get("uuid"),
           // 当前的 token
-          token: util.cookies.get('token'),
+          token: cookies.get("token"),
           // 当前地址
-          url: get(window, 'location.href', ''),
+          url: get(window, "location.href", ""),
           // 用户设置
           ...meta
         }
-      })
+      });
     }
   },
   mutations: {
@@ -63,16 +63,16 @@ export default {
      * @param {Object} state state
      * @param {Object} log data
      */
-    push (state, log) {
-      state.log.push(log)
+    push(state, log) {
+      state.log.push(log);
     },
     /**
      * @description 清空日志
      * @param {Object} state state
      */
-    clean (state) {
+    clean(state) {
       // store 赋值
-      state.log = []
+      state.log = [];
     }
   }
-}
+};

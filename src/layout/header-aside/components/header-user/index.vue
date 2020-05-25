@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown size="small" class="d2-mr">
+  <el-dropdown size="small">
     <span class="btn-text">{{info.username ? `你好 ${info.username}` : '未登录'}}</span>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item @click.native="logOff">

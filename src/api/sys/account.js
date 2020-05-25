@@ -1,4 +1,4 @@
-import request from "@/plugin/axios";
+import request from "@/libs/axios";
 
 export function userLogin(data) {
   return request({

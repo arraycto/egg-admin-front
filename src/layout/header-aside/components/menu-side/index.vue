@@ -1,19 +1,14 @@
 <template>
   <div class="d2-layout-header-aside-menu-side">
-    <el-menu
-      :collapse="asideCollapse"
-      :unique-opened="true"
-      :default-active="active"
-      ref="menu"
-    >
+    <el-menu :collapse="asideCollapse" :unique-opened="true" :default-active="active" ref="menu">
       <template v-for="(menu, menuIndex) in aside">
-        <d2-layout-header-aside-menu-sub
+        <d2LayoutMenuSub
           v-if="menu.children&&menu.children.length"
           :menu="menu"
           :key="menuIndex"
           @click="menuClick"
         />
-        <d2-layout-header-aside-menu-item v-else :menu="menu" :key="menuIndex" @click="menuClick"/>
+        <d2LayoutMenuItem v-else :menu="menu" :key="menuIndex" @click="menuClick" />
       </template>
     </el-menu>
     <div
@@ -29,16 +24,16 @@
 
 <script>
 import { mapState } from "vuex";
-import menuMixin from "../mixin/menu";
-import d2LayoutMainMenuItem from "../components/menu-item/index.vue";
-import d2LayoutMainMenuSub from "../components/menu-sub/index.vue";
+import menuMixin from "@/mixins/menu";
+import d2LayoutMenuItem from "../menu-item";
+import d2LayoutMenuSub from "../menu-sub";
 import BScroll from "better-scroll";
 export default {
-  name: "d2-layout-header-aside-menu-side",
+  name: "d2-layout-menu-side",
   mixins: [menuMixin],
   components: {
-    "d2-layout-header-aside-menu-item": d2LayoutMainMenuItem,
-    "d2-layout-header-aside-menu-sub": d2LayoutMainMenuSub
+    d2LayoutMenuItem,
+    d2LayoutMenuSub
   },
   data() {
     return {

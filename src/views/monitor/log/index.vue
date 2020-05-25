@@ -40,7 +40,6 @@ export default {
   watch: {
     $route: {
       handler(val) {
-        console.log(val.query.type);
         this.crudOption.getList = getList[val.query.type];
         this.getDataList();
       },

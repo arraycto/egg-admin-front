@@ -49,10 +49,10 @@
 <script>
 import { throttle } from "lodash";
 import { mapState } from "vuex";
-import menuMixin from "../mixin/menu";
+import menuMixin from "@/mixins/menu";
 
 export default {
-  name: "d2-layout-header-aside-menu-header",
+  name: "d2-layout-menu-header",
   mixins: [menuMixin],
   data() {
     return {
@@ -70,7 +70,7 @@ export default {
   watch: {
     "$route.matched": {
       handler(val) {
-        const path = val[0].path;
+        const path = val[1].path;
         this.active = path;
         this.$nextTick(() => {
           if (this.header.length > 0 && this.$refs.menu) {

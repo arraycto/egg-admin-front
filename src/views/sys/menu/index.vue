@@ -7,7 +7,7 @@
       :data="tableData"
       :table-loading="tableLoading"
       :option="tableOption"
-      :permission="perm"
+      :permission="permission"
       @current-change="pageCurrentChange"
       @size-change="pageSizeChange"
       @row-update="handleUpdateHook"
@@ -38,7 +38,7 @@
           size="small"
           icon="el-icon-plus"
           @click="addMenu(row)"
-          v-perm="'sys_menu_save'"
+          v-if="permission.addSubBtn"
         >新增下级</el-button>
       </template>
       <template #componentForm="{row}">
@@ -108,12 +108,13 @@ export default {
     }
   },
   computed: {
-    ...mapState("d2admin/menu", ["permission"]),
-    perm() {
+    ...mapState("d2admin/menu", ["perm"]),
+    permission() {
       return {
-        addBtn: !!this.permission.sys_menu_save,
-        editBtn: !!this.permission.sys_menu_update,
-        delBtn: !!this.permission.sys_menu_delete
+        addBtn: !!this.perm.sys_menu_save,
+        editBtn: !!this.perm.sys_menu_update,
+        delBtn: !!this.perm.sys_menu_delete,
+        addSubBtn: !!this.perm.sys_menu_save
       };
     },
     menuTree() {

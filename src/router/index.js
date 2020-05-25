@@ -3,12 +3,13 @@ import VueRouter from "vue-router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import store from "@/store";
-import util from "@/libs/util.js";
+import { setTitle, cookies, routerUtil } from "@/libs/util";
 import { frameIn, frameOut, errorPage } from "./routes";
+import layoutHeaderAside from "@/layout/header-aside";
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-  base: process.env.VUE_APP_PUBLIC_PATH || '/',
+  base: process.env.VUE_APP_PUBLIC_PATH || "/",
   mode: "history",
   routes: frameIn.concat(...frameOut)
 });
@@ -18,7 +19,7 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start();
   // 关闭搜索面板
   store.commit("d2admin/search/set", false);
-  const isLogin = util.cookies.get("token"); // 是否已登录
+  const isLogin = cookies.get("token"); // 是否已登录
   const isFrameOut = frameOut.some(item => item.name === to.name); // 是否框架外页面
   const hasMenu = store.state.d2admin.menu.header.length; // 是否已获取菜单
   if (isFrameOut) {
@@ -37,7 +38,8 @@ router.beforeEach(async (to, from, next) => {
       // 已登录，未获取到菜单
       const menuRoutes = await store.dispatch("d2admin/menu/getMenu");
       store.commit("d2admin/page/init", [...frameIn, ...menuRoutes]);
-      router.addRoutes(menuRoutes); // 动态的添加路由
+      // 动态的添加路由
+      router.addRoutes(routerUtil.getLayoutRoutes(menuRoutes));
       router.addRoutes(errorPage); // 增加404page
       next({ ...to, replace: true });
     }
@@ -56,7 +58,7 @@ router.afterEach(to => {
   // 多页控制 打开新的页面
   store.dispatch("d2admin/page/open", to);
   // 更改标题
-  util.title(to.meta.title);
+  setTitle(to.meta.title);
 });
 
 export default router;

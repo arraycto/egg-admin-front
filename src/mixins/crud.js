@@ -17,7 +17,7 @@ export default {
         currentPage: 1, // 当前页数
         pageSize: 10 // 每页显示多少条
       },
-      page: {},
+      page: null,
       searchForm: {}, // 查询条件
       tableData: [], // 数据列表
       formData: {},
@@ -26,7 +26,6 @@ export default {
     };
   },
   created() {
-    this.page = this.pageDefault;
     if (this.crudOption.created) {
       this.getDataList();
     }
@@ -35,6 +34,9 @@ export default {
     // 获取数据列表
     getDataList() {
       this.tableLoading = true;
+      if (!this.page) {
+        this.page = this.pageDefault || {};
+      }
       return this.crudOption
         .getList({
           ...this.page,
@@ -198,7 +200,6 @@ export default {
           temp[key] = row[key];
         }
       }
-
       return temp;
     }
   }

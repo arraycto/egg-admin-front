@@ -5,12 +5,12 @@
       <span slot="title">{{menu.title}}</span>
     </template>
     <template v-for="(child, childIndex) in menu.children">
-      <d2-layout-header-aside-menu-sub
+      <d2LayoutMenuSub
         v-if="child.children&&child.children.length"
         :menu="child"
         :key="childIndex"
       />
-      <d2-layout-header-aside-menu-item v-else :menu="child" :key="childIndex" @click="$emit('click',$event)"/>
+      <d2LayoutMenuItem v-else :menu="child" :key="childIndex" @click="$emit('click',$event)" />
     </template>
   </el-submenu>
 </template>
@@ -18,12 +18,12 @@
 <script>
 import { uniqueId } from "lodash";
 // 组件
-import d2LayoutMainMenuItem from "../menu-item";
+import d2LayoutMenuItem from "../menu-item";
 
 export default {
-  name: "d2-layout-header-aside-menu-sub",
+  name: "d2-layout-menu-sub",
   components: {
-    "d2-layout-header-aside-menu-item": d2LayoutMainMenuItem
+    d2LayoutMenuItem
   },
   props: {
     menu: {

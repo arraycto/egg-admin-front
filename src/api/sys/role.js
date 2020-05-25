@@ -1,4 +1,4 @@
-import request from "@/plugin/axios";
+import request from "@/libs/axios";
 
 // 获取列表
 export function getList(params) {

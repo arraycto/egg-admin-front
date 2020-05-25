@@ -1,7 +1,7 @@
 // 设置文件
 import setting from "@/setting.js";
 import { getMenu, getPermissions } from "@/api/sys/menu.js";
-import { generateRoutes } from "@/libs/util.js";
+import { routerUtil } from "@/libs/util";
 
 export default {
   namespaced: true,
@@ -13,8 +13,8 @@ export default {
     // 侧边栏收缩
     asideCollapse: setting.menu.asideCollapse,
     // 权限
-    permissions: [],
-    permission: {}
+    perms: [],
+    perm: {}
   },
   actions: {
     /**
@@ -89,11 +89,11 @@ export default {
       return new Promise(async resolve => {
         if (!state.header || !state.header.length || force) {
           const menu = await getMenu();
-          let routes = generateRoutes(menu);
+          let routes = routerUtil.generateRoutes(menu);
           commit("headerSet", routes);
           commit("d2admin/search/init", routes, { root: true });
           const permissions = await getPermissions();
-          commit("permissionsSet", permissions);
+          commit("permsSet", permissions);
         }
         resolve(state.header);
       });
@@ -121,16 +121,16 @@ export default {
     /**
      * @description 设置权限
      * @param {Object} state state
-     * @param {Array} per permissions
+     * @param {Array} perms permissions
      */
-    permissionsSet(state, perms = []) {
+    permsSet(state, perms = []) {
       // store 赋值
-      state.permissions = perms;
-      const permission = {};
+      state.perms = perms;
+      const perm = {};
       perms.forEach(item => {
-        permission[item] = true;
+        perm[item] = true;
       });
-      state.permission = permission;
+      state.perm = perm;
     }
   }
 };

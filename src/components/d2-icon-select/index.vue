@@ -1,31 +1,37 @@
 <template>
   <span>
-    <el-popover
-      ref="pop"
-      v-model="pop"
-      :placement="placement"
-      width="300"
-      trigger="click">
+    <el-popover ref="pop" v-model="pop" :placement="placement" width="300" trigger="click">
       <el-row type="flex" justify="end" class="d2-mb-10" v-if="clearable">
         <el-button
           type="danger"
           icon="el-icon-delete"
           size="mini"
           class="d2-fr"
-          @click="selectIcon()">
-          清空
-        </el-button>
+          @click="selectIcon()"
+        >清空</el-button>
       </el-row>
       <el-input
         v-model="searchText"
         :clearable="true"
         placeholder="搜索 比如 'plus'"
-        prefix-icon="el-icon-search">
-      </el-input>
+        prefix-icon="el-icon-search"
+      ></el-input>
       <el-collapse v-if="!searchMode" class="d2-icon-select--group" v-model="collapseActive">
-        <el-collapse-item v-for="(item, index) in icon" :key="index" :title="item.title" :name="index" class="d2-icon-select--class">
+        <el-collapse-item
+          v-for="(item, index) in icon"
+          :key="index"
+          :title="item.title"
+          :name="index"
+          class="d2-icon-select--class"
+        >
           <el-row class="d2-icon-select--class-row">
-            <el-col class="d2-icon-select--class-col" v-for="(iconName, iconIndex) in item.icon" :key="iconIndex" :span="4" @click.native="selectIcon(iconName)">
+            <el-col
+              class="d2-icon-select--class-col"
+              v-for="(iconName, iconIndex) in item.icon"
+              :key="iconIndex"
+              :span="4"
+              @click.native="selectIcon(iconName)"
+            >
               <i :class="'fa fa-' + iconName"></i>
             </el-col>
           </el-row>
@@ -35,7 +41,13 @@
         <div class="d2-icon-select--class" v-for="(item, index) in iconFilted" :key="index">
           <div class="d2-icon-select--class-title">{{item.title}}</div>
           <el-row class="d2-icon-select--class-row">
-            <el-col class="d2-icon-select--class-col" v-for="(iconName, iconIndex) in item.icon" :key="iconIndex" :span="4" @click.native="selectIcon(iconName)">
+            <el-col
+              class="d2-icon-select--class-col"
+              v-for="(iconName, iconIndex) in item.icon"
+              :key="iconIndex"
+              :span="4"
+              @click.native="selectIcon(iconName)"
+            >
               <i :class="'fa fa-' + iconName"></i>
             </el-col>
           </el-row>
@@ -43,11 +55,7 @@
       </div>
     </el-popover>
     <!-- 允许用户输入 -->
-    <el-input
-      v-if="userInput"
-      v-model="currentValue"
-      v-bind="bind"
-      style="max-width: 240px;">
+    <el-input v-if="userInput" v-model="currentValue" v-bind="bind" style="max-width: 240px;">
       <template v-if="value" slot="prepend">
         <i :class="'fa fa-' + value"></i>
       </template>
@@ -66,27 +74,27 @@
 </template>
 
 <script>
-import icon from './data/index'
+import icon from "./data";
 export default {
-  name: 'd2-icon-select',
+  name: "d2-icon-select",
   props: {
     // 值
     value: {
       type: String,
       required: false,
-      default: ''
+      default: ""
     },
     // 占位符
     placeholder: {
       type: String,
       required: false,
-      default: '请选择'
+      default: "请选择"
     },
     // 弹出界面的方向
     placement: {
       type: String,
       required: false,
-      default: 'right'
+      default: "right"
     },
     // 是否可清空
     clearable: {
@@ -107,59 +115,63 @@ export default {
       default: true
     }
   },
-  data () {
+  data() {
     return {
       // 绑定弹出框
       pop: false,
       // 所有图标
       icon,
       // 组件内输入框的值
-      currentValue: '',
+      currentValue: "",
       // 搜索的文字
-      searchText: '',
+      searchText: "",
       // 不是搜索的时候显示的折叠面板绑定的展开数据
       collapseActive: []
       // collapseActive: [...Array(icon.length)].map((e, i) => i)
-    }
+    };
   },
   computed: {
     // 输入框上绑定的设置
-    bind () {
+    bind() {
       return {
         placeholder: this.placeholder,
         clearable: this.clearable,
         ...this.$attrs
-      }
+      };
     },
     // 是否在搜索
-    searchMode () {
-      return !!this.searchText
+    searchMode() {
+      return !!this.searchText;
     },
     // 过滤后的图标
-    iconFilted () {
-      return this.icon.map(iconClass => ({
-        title: iconClass.title,
-        icon: iconClass.icon.filter(icon => icon.indexOf(this.searchText) >= 0)
-      })).filter(iconClass => iconClass.icon.length > 0)
+    iconFilted() {
+      return this.icon
+        .map(iconClass => ({
+          title: iconClass.title,
+          icon: iconClass.icon.filter(
+            icon => icon.indexOf(this.searchText) >= 0
+          )
+        }))
+        .filter(iconClass => iconClass.icon.length > 0);
     }
   },
   watch: {
-    value (value) {
-      this.currentValue = value
+    value(value) {
+      this.currentValue = value;
     }
   },
-  created () {
-    this.currentValue = this.value
+  created() {
+    this.currentValue = this.value;
   },
   methods: {
-    selectIcon (iconName = '') {
-      this.$emit('input', iconName)
+    selectIcon(iconName = "") {
+      this.$emit("input", iconName);
       if (iconName && this.autoClose) {
-        this.pop = false
+        this.pop = false;
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

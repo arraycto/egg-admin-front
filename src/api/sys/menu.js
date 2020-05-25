@@ -1,4 +1,4 @@
-import request from "@/plugin/axios";
+import request from "@/libs/axios";
 
 // 获取导航菜单
 export function getMenu() {

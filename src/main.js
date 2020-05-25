@@ -4,21 +4,14 @@ import i18n from "./i18n";
 import App from "./App";
 // store
 import store from "@/store/index";
-
 // 菜单和路由设置
 import router from "./router";
-
-// Avue
-import Avue from "@smallwei/avue";
-import "@smallwei/avue/lib/index.css";
+// 核心插件
+import plugin from "@/libs/plugin";
 
 // 核心插件
-import d2Admin from "@/plugin/d2admin";
+Vue.use(plugin);
 
-// 核心插件
-Vue.use(d2Admin);
-
-Vue.use(Avue);
 new Vue({
   router,
   store,
