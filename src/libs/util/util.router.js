@@ -19,19 +19,19 @@ router.generateRoutes = (menuArr, parent = { path: "" }) => {
       menu.children && menu.children.length
         ? router.generateRoutes(menu.children, menu)
         : [];
-    const result = {
+    return {
       ...menu,
       path,
-      children,
       component,
+      children,
       meta: {
         title: menu.title,
         cache: menu.cache,
         url: menu.url,
-        blank: menu.blank
+        blank: menu.blank,
+        query: menu.query
       }
     };
-    return result;
   });
 };
 

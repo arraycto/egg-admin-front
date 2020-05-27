@@ -10,7 +10,7 @@ export default {
         window.open(menu.meta.url, "_blank");
       } else {
         this.$router.push({
-          path: menu.path + (menu.query || "")
+          path: menu.path + (menu.meta.query || "")
         });
       }
     }

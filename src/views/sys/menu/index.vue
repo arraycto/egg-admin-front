@@ -49,7 +49,6 @@
           default-first-option
           placeholder="请选择或输入前端组件"
         >
-          <el-option label="Layout" value="Layout"></el-option>
           <el-option label="Main" value="Main"></el-option>
           <el-option label="Iframe" value="Iframe"></el-option>
         </el-select>
