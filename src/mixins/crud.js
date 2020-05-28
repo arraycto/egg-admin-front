@@ -9,7 +9,6 @@ export default {
         create: null, // 添加数据方法
         update: null, // 编辑数据方法
         remove: null // 删除单条数据方法
-        // removes: null // 删除多条数据方法
       },
       // 默认属性
       pageDefault: {
@@ -18,6 +17,8 @@ export default {
         pageSize: 10 // 每页显示多少条
       },
       page: null,
+      sortDefault: { order: "descending", prop: "createTime" }, // 排序
+      sort: null,
       searchForm: {}, // 查询条件
       tableData: [], // 数据列表
       formData: {},
@@ -31,15 +32,21 @@ export default {
     }
   },
   methods: {
-    // 获取数据列表
+    /**
+     * @description 获取数据列表
+     */
     getDataList() {
       this.tableLoading = true;
       if (!this.page) {
         this.page = this.pageDefault || {};
       }
+      if (!this.sort) {
+        this.sort = this.sortDefault || {};
+      }
       return this.crudOption
         .getList({
           ...this.page,
+          ...this.sort,
           ...this.searchForm
         })
         .then(response => {
@@ -48,7 +55,6 @@ export default {
           this.page.total = response.total || 0;
         })
         .catch(e => {
-          console.error(e);
           this.tableData = [];
           this.page.total = 0;
         })
@@ -58,10 +64,10 @@ export default {
         });
     },
     /**
-     * @title 数据添加
-     * @param row 为当前的数据
+     * @description 数据添加
+     * @param {Object} row 为当前的数据
      * @param {Function} done 为表单关闭函数
-     *
+     * @param {Function} loading 为表单停止loading函数
      **/
     handleSave(row, done, loading) {
       let obj = this.filterObj(row);
@@ -82,10 +88,11 @@ export default {
         });
     },
     /**
-     * @title 数据更新
+     * @description 数据更新
      * @param {Object} row 为当前的数据
      * @param {Number} index 为当前更新数据的行数
      * @param {Function} done 为表单关闭函数
+     * @param {Function} loading 为表单停止loading函数
      **/
     handleUpdate(row, index, done, loading) {
       let obj = this.filterObj(row);
@@ -105,7 +112,7 @@ export default {
         });
     },
     /**
-     * @title 删除行
+     * @description 删除行
      * @param {Object} row 行数据
      */
     rowDel(row) {
@@ -125,7 +132,7 @@ export default {
         });
     },
     /**
-     * @title 搜索
+     * @description 搜索
      * @param {Object} form 搜索表单数据(不含自定义项)
      */
     searchChange(form, done) {
@@ -134,7 +141,7 @@ export default {
       done && done();
     },
     /**
-     * @title 搜索重置
+     * @description 搜索重置
      */
     searchReset() {
       this.searchForm = {};
@@ -142,14 +149,14 @@ export default {
       this.getDataList();
     },
     /**
-     * @title 多选
+     * @description 多选
      * @param {Array} row 选中行数据
      */
     selectionChange(row) {
       this.dataSelections = row;
     },
     /**
-     * @title 批量删除
+     * @description 批量删除
      */
     batchDel() {
       const length = this.dataSelections.length;
@@ -174,23 +181,37 @@ export default {
         });
     },
     /**
-     * @title 分页, 每页条数
-     * @param {integer} size 每页条数
+     * @description 分页, 每页条数
+     * @param {Number} size 每页条数
      */
     pageSizeChange(size) {
       this.page.pageSize = size;
       this.getDataList();
     },
     /**
-     * @title 分页, 当前页
-     * @param {integer} current 当前页
+     * @description 分页, 当前页
+     * @param {Number} current 当前页
      */
     pageCurrentChange(current) {
       this.page.currentPage = current;
       this.getDataList();
     },
     /**
-     * @title 过滤对象空值
+     * @description 排序
+     * @param {Object} column 列数据
+     * @param {String} order 排序顺序
+     * @param {String} prop 排序字段
+     */
+    sortChange({ column, order, prop }) {
+      if (order && prop) {
+        this.sort = { order, prop };
+      } else {
+        this.sort = this.sortDefault;
+      }
+      this.getDataList();
+    },
+    /**
+     * @description 过滤对象空值
      * @param {Object} row 被过滤对象
      */
     filterObj(row) {

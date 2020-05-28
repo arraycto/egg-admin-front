@@ -4,8 +4,8 @@ import { Message } from "element-ui";
 import { log, cookies } from "@/libs/util";
 import qs from "qs";
 // 创建一个错误
-function errorCreate(msg) {
-  const error = new Error(msg);
+function errorCreate(message) {
+  const error = new Error(message);
   errorLog(error);
   throw error;
 }
@@ -26,17 +26,13 @@ function errorLog(error) {
     console.log(error);
   }
   // 显示提示
-  Message({
-    message: error.response.data.msg,
-    type: "error",
-    duration: 5 * 1000
-  });
+  Message.error(error.response.data.message);
 }
 
 // 创建一个 axios 实例
 const service = axios.create({
   baseURL: process.env.VUE_APP_API,
-  timeout: 5000, // 请求超时时间
+  timeout: process.env.NODE_ENV === "development" ? 15000 : 5000, // 请求超时时间
   withCredentials: true
 });
 
@@ -83,18 +79,28 @@ service.interceptors.response.use(
           return dataAxios.data;
         case "xxx":
           // [ 示例 ] 其它和后台约定的 code
-          errorCreate(`[ code: xxx ] ${dataAxios.msg}: ${response.config.url}`);
+          errorCreate(
+            `[code:xxx] ${dataAxios.message}: ${response.config.url}`
+          );
           break;
         default:
           // 不是正确的 code
-          errorCreate(`${dataAxios.msg}: ${response.config.url}`);
+          errorCreate(`${dataAxios.message}: ${response.config.url}`);
           break;
       }
     }
   },
   error => {
-    errorLog(error);
-    return Promise.reject(error);
+    const { code } = error.response.data;
+    switch (code) {
+      case 401:
+        Message.error("token已过期，请重新登录");
+        setTimeout(() => store.dispatch("d2admin/account/logout"), 3000);
+        break;
+      default:
+        errorLog(error);
+        return Promise.reject(error);
+    }
   }
 );
 

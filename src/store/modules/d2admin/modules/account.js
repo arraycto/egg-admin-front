@@ -33,7 +33,6 @@ export default {
             resolve();
           })
           .catch(err => {
-            console.log("err: ", err);
             reject(err);
           });
       });

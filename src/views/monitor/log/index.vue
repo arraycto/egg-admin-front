@@ -4,17 +4,18 @@
       ref="crud"
       v-model="formData"
       :page="page"
-      :data="tableData"
       :table-loading="tableLoading"
       :option="tableOption"
+      :data="tableData"
       @current-change="pageCurrentChange"
       @size-change="pageSizeChange"
-      @row-update="handleUpdate"
-      @row-save="handleSave"
       @search-change="searchChange"
       @search-reset="searchReset"
       @refresh-change="getDataList"
       @selection-change="selectionChange"
+      @sort-change="sortChange"
+      @row-save="handleSave"
+      @row-update="handleUpdate"
       @row-del="rowDel"
     ></avue-crud>
   </d2-container>
@@ -23,7 +24,7 @@
 <script>
 import crudMixin from "@/mixins/crud";
 import { tableOption } from "./option";
-import { getList } from "@/api/sys/log";
+import { getLogList, getList } from "@/api/sys/log";
 
 export default {
   name: "sys-log",
@@ -40,7 +41,8 @@ export default {
   watch: {
     $route: {
       handler(val) {
-        this.crudOption.getList = getList[val.query.type];
+        const { type } = val.query;
+        this.crudOption.getList = type ? getLogList[type] : getList;
         this.getDataList();
       },
       immediate: true

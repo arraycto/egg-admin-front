@@ -1,24 +1,39 @@
 import request from "@/libs/axios";
 
+export function getList(params) {
+  return request({
+    url: "/log",
+    params
+  });
+}
 export function getLoginLog(params) {
   return request({
-    url: "/log/login/get",
-    params
+    url: "/log",
+    params: {
+      ...params,
+      type: "login"
+    }
   });
 }
 export function getActionLog(params) {
   return request({
-    url: "/log/action/get",
-    params
+    url: "/log",
+    params: {
+      ...params,
+      type: "action"
+    }
   });
 }
 export function getErrorLog(params) {
   return request({
-    url: "/log/error/get",
-    params
+    url: "/log",
+    params: {
+      ...params,
+      status: 0
+    }
   });
 }
-export const getList = {
+export const getLogList = {
   login: getLoginLog,
   action: getActionLog,
   error: getErrorLog

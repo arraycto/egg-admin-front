@@ -60,21 +60,15 @@ export default {
       });
     });
   },
-  mounted() {
-    console.log(this);
-  },
   methods: {
     handleSuccess(res, file, fileList) {
-      const value = this.value
-        .split(",")
-        .concat(res.data._id)
-        .join(",");
       this.fileList = fileList.map(item => {
         return {
           ...item,
           ...(item.response && item.response.data ? item.response.data : {})
         };
       });
+      const value = this.fileList.map(item => item._id).join(",");
       this.$emit("input", value);
       this.$emit("success", res, file, this.fileList);
       this.$emit("change", this.fileList);
@@ -93,6 +87,9 @@ export default {
       }).then(() => remove(file._id));
     },
     handleRemove(file, fileList) {
+      this.fileList = fileList;
+      const value = this.fileList.map(item => item._id).join(",");
+      this.$emit("input", value);
       this.$emit("remove", file, fileList);
       this.$emit("change", fileList);
     },

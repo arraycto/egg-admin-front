@@ -43,7 +43,6 @@ export const tableOption = {
     {
       label: "状态",
       prop: "status",
-      search: true,
       type: "select",
       dicData: [
         {
@@ -58,12 +57,18 @@ export const tableOption = {
     },
     // {
     //   label: "类型",
-    //   prop: "type"
+    //   prop: "type",
     // },
     {
       label: "错误信息",
       prop: "error",
       overHidden: true
+    },
+    {
+      label: "日志时间",
+      prop: "createTime",
+      type: "datetimerange",
+      search: true
     }
   ]
 };
