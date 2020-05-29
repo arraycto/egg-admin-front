@@ -17,6 +17,10 @@ export const tableOption = {
       search: true
     },
     {
+      label: "操作名称",
+      prop: "summary"
+    },
+    {
       label: "ip地址",
       prop: "ip",
       search: true
