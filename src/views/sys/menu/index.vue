@@ -133,8 +133,7 @@ export default {
       await this.$nextTick();
       this.formData.parentId = row._id;
     },
-    async handleUpdateHook(...arg) {
-      await this.handleUpdate.apply(this, arg);
+    async afterUpdate() {
       this.getMenu(true);
     }
   }

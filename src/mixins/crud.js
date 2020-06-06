@@ -35,7 +35,8 @@ export default {
     /**
      * @description 获取数据列表
      */
-    getDataList() {
+    async getDataList() {
+      this.beforeGetList && (await this.beforeGetList());
       this.tableLoading = true;
       if (!this.page) {
         this.page = this.pageDefault || {};
@@ -58,9 +59,10 @@ export default {
           this.tableData = [];
           this.page.total = 0;
         })
-        .finally(() => {
+        .finally(async () => {
           this.$refs.crud && this.$refs.crud.selectClear();
           this.tableLoading = false;
+          this.afterGetList && (await this.afterGetList());
         });
     },
     /**
@@ -69,22 +71,22 @@ export default {
      * @param {Function} done 为表单关闭函数
      * @param {Function} loading 为表单停止loading函数
      **/
-    handleSave(row, done, loading) {
+    async handleSave(row, done, loading) {
+      this.beforeSave && (await this.beforeSave());
       let obj = this.filterObj(row);
       delete obj[this.crudOption.rowKey];
       return this.crudOption
         .create(obj)
         .then(res => {
-          this.$message({
-            showClose: true,
-            message: "保存成功",
-            type: "success"
-          });
+          this.$message.success("保存成功");
           this.getDataList();
           done && done();
         })
         .catch(e => {
           loading && loading();
+        })
+        .finally(async () => {
+          this.afterSave && (await this.afterSave());
         });
     },
     /**
@@ -94,28 +96,29 @@ export default {
      * @param {Function} done 为表单关闭函数
      * @param {Function} loading 为表单停止loading函数
      **/
-    handleUpdate(row, index, done, loading) {
+    async handleUpdate(row, index, done, loading) {
+      this.beforeUpdate && (await this.beforeUpdate());
       let obj = this.filterObj(row);
       return this.crudOption
         .update(obj[this.crudOption.rowKey], obj)
         .then(res => {
-          this.$message({
-            showClose: true,
-            message: "保存成功",
-            type: "success"
-          });
+          this.$message.success("保存成功");
           this.getDataList();
           done && done();
         })
         .catch(e => {
           loading && loading();
+        })
+        .finally(async () => {
+          this.afterUpdate && (await this.afterUpdate());
         });
     },
     /**
      * @description 删除行
      * @param {Object} row 行数据
      */
-    rowDel(row) {
+    async rowDel(row) {
+      this.beforeRowDel && (await this.beforeRowDel());
       return this.$confirm("确认进行删除操作？", "提示", {
         type: "warning"
       })
@@ -123,12 +126,11 @@ export default {
           return this.crudOption.remove(row[this.crudOption.rowKey]);
         })
         .then(res => {
-          this.$message({
-            showClose: true,
-            message: "删除成功",
-            type: "success"
-          });
+          this.$message.success("删除成功");
           this.getDataList();
+        })
+        .finally(async () => {
+          this.afterRowDel && (await this.afterRowDel());
         });
     },
     /**
@@ -136,7 +138,14 @@ export default {
      * @param {Object} form 搜索表单数据(不含自定义项)
      */
     searchChange(form, done) {
-      this.searchForm = form;
+      this.searchForm = this.filterObj(
+        Object.assign(
+          this.searchForm,
+          this.$refs.crud ? this.$refs.crud.searchForm : {},
+          form
+        ),
+        [undefined, null, ""]
+      );
       this.getDataList();
       done && done();
     },
@@ -158,7 +167,8 @@ export default {
     /**
      * @description 批量删除
      */
-    batchDel() {
+    async batchDel() {
+      this.beforeBatchDel && (await this.beforeBatchDel());
       const length = this.dataSelections.length;
       if (!length) {
         return this.$message.warning("请选择删除项");
@@ -167,10 +177,8 @@ export default {
         type: "warning"
       })
         .then(() => {
-          let ids = this.dataSelections
-            .map(item => {
-              return item[this.crudOption.rowKey];
-            })
+          const ids = this.dataSelections
+            .map(item => item[this.crudOption.rowKey])
             // 根据后端接口传数组或者逗号拼接的字符串
             .join(",");
           return this.crudOption.remove(ids);
@@ -178,6 +186,9 @@ export default {
         .then(res => {
           this.$message.success("删除成功");
           this.getDataList();
+        })
+        .finally(async () => {
+          this.afterBatchDel && (await this.afterBatchDel());
         });
     },
     /**
@@ -213,11 +224,12 @@ export default {
     /**
      * @description 过滤对象空值
      * @param {Object} row 被过滤对象
+     * @param {Array} value 过滤的值
      */
-    filterObj(row) {
+    filterObj(row, value = [undefined, null]) {
       let temp = {};
       for (const key in row) {
-        if (row[key] !== undefined && row[key] !== null && !key.includes("$")) {
+        if (value.every(val => row[key] !== val)) {
           temp[key] = row[key];
         }
       }
