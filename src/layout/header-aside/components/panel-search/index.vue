@@ -67,9 +67,9 @@ export default {
     resultsList() {
       return this.results.length === 0 && this.searchText === ""
         ? this.pool.map(e => ({
-            value: e.fullTitle,
-            ...e
-          }))
+          value: e.fullTitle,
+          ...e
+        }))
         : this.results;
     }
   },

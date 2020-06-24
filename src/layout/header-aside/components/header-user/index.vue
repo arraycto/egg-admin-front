@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex';
 export default {
   computed: {
     ...mapState('d2admin/user', [
@@ -28,8 +28,8 @@ export default {
     logOff () {
       this.logout({
         confirm: true
-      })
+      });
     }
   }
-}
+};
 </script>

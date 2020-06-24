@@ -1001,4 +1001,4 @@ export default [
       'wheelchair-alt'
     ]
   }
-]
+];

@@ -1,28 +1,28 @@
-const CompressionWebpackPlugin = require('compression-webpack-plugin')
-const VueFilenameInjector = require('@d2-projects/vue-filename-injector')
-const ThemeColorReplacer = require('webpack-theme-color-replacer')
-const forElementUI = require('webpack-theme-color-replacer/forElementUI')
-const cdnDependencies = require('./dependencies-cdn')
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const VueFilenameInjector = require('@d2-projects/vue-filename-injector');
+const ThemeColorReplacer = require('webpack-theme-color-replacer');
+const forElementUI = require('webpack-theme-color-replacer/forElementUI');
+const cdnDependencies = require('./dependencies-cdn');
 
 // 拼接路径
-const resolve = dir => require('path').join(__dirname, dir)
+const resolve = dir => require('path').join(__dirname, dir);
 
 // 增加环境变量
-process.env.VUE_APP_VERSION = require('./package.json').version
-process.env.VUE_APP_BUILD_TIME = require('dayjs')().format('YYYY-M-D HH:mm:ss')
+process.env.VUE_APP_VERSION = require('./package.json').version;
+process.env.VUE_APP_BUILD_TIME = require('dayjs')().format('YYYY-M-D HH:mm:ss');
 
 // 基础路径 注意发布之前要先修改这里
-let publicPath = process.env.VUE_APP_PUBLIC_PATH || '/'
+let publicPath = process.env.VUE_APP_PUBLIC_PATH || '/';
 
 // 设置不参与构建的库
-let externals = {}
-cdnDependencies.forEach(package => { externals[package.name] = package.library })
+let externals = {};
+cdnDependencies.forEach(item => { externals[item.name] = item.library });
 
 // 引入文件的 cdn 链接
 const cdn = {
   css: cdnDependencies.map(e => e.css).filter(e => e),
   js: cdnDependencies.map(e => e.js).filter(e => e)
-}
+};
 
 module.exports = {
   // 根据你的实际情况更改这里
@@ -47,9 +47,9 @@ module.exports = {
     }
   },
   configureWebpack: config => {
-    const configNew = {}
+    const configNew = {};
     if (process.env.NODE_ENV === 'production') {
-      configNew.externals = externals
+      configNew.externals = externals;
       configNew.plugins = [
         // gzip
         new CompressionWebpackPlugin({
@@ -59,15 +59,15 @@ module.exports = {
           minRatio: 0.8,
           deleteOriginalAssets: false
         })
-      ]
+      ];
     }
     if (process.env.NODE_ENV === 'development') {
       // 关闭 host check，方便使用 ngrok 之类的内网转发工具
       configNew.devServer = {
         disableHostCheck: true
-      }
+      };
     }
-    return configNew
+    return configNew;
   },
   // 默认设置: https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-service/lib/config/base.js
   chainWebpack: config => {
@@ -76,12 +76,12 @@ module.exports = {
      */
     config.plugin('html').tap(args => {
       if (process.env.NODE_ENV === 'production') {
-        args[0].cdn = cdn
+        args[0].cdn = cdn;
       } else {
-        args[0].cdn = []
+        args[0].cdn = [];
       }
-      return args
-    })
+      return args;
+    });
     /**
      * 删除懒加载模块的 prefetch preload，降低带宽压力
      * https://cli.vuejs.org/zh/guide/html-and-static-assets.html#prefetch
@@ -90,10 +90,10 @@ module.exports = {
      */
     config.plugins
       .delete('prefetch')
-      .delete('preload')
+      .delete('preload');
     // 解决 cli3 热更新失效 https://github.com/vuejs/vue-cli/issues/1559
     config.resolve
-      .symlinks(true)
+      .symlinks(true);
     config
       .plugin('theme-color-replacer')
       .use(ThemeColorReplacer, [{
@@ -103,7 +103,7 @@ module.exports = {
         ],
         externalCssFiles: [ './node_modules/element-ui/lib/theme-chalk/index.css' ], // optional, String or string array. Set external css files (such as cdn css) to extract colors.
         changeSelector: forElementUI.changeSelector
-      }])
+      }]);
     config
       // 开发环境 sourcemap 不包含列信息
       .when(process.env.NODE_ENV === 'development',
@@ -115,17 +115,17 @@ module.exports = {
         config => VueFilenameInjector(config, {
           propName: process.env.VUE_APP_SOURCE_VIEWER_PROP_NAME
         })
-      )
+      );
     // markdown
     config.module
       .rule('md')
       .test(/\.md$/)
       .use('text-loader')
       .loader('text-loader')
-      .end()
+      .end();
     // svg
-    const svgRule = config.module.rule('svg')
-    svgRule.uses.clear()
+    const svgRule = config.module.rule('svg');
+    svgRule.uses.clear();
     svgRule
       .include
       .add(resolve('src/assets/svg-icons/icons'))
@@ -135,29 +135,29 @@ module.exports = {
       .options({
         symbolId: 'd2-[name]'
       })
-      .end()
+      .end();
     // image exclude
-    const imagesRule = config.module.rule('images')
+    const imagesRule = config.module.rule('images');
     imagesRule
       .test(/\.(png|jpe?g|gif|webp|svg)(\?.*)?$/)
       .exclude
       .add(resolve('src/assets/svg-icons/icons'))
-      .end()
+      .end();
     // 重新设置 alias
     config.resolve.alias
-      .set('@api', resolve('src/api'))
+      .set('@api', resolve('src/api'));
     // 判断环境加入模拟数据
-    const entry = config.entry('app')
+    const entry = config.entry('app');
     if (process.env.VUE_APP_MODE === 'MOCK') {
       entry
         .add('@/mock')
-        .end()
+        .end();
     }
     // 分析工具
     if (process.env.npm_config_report) {
       config
         .plugin('webpack-bundle-analyzer')
-        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin);
     }
   },
   // 不输出 map 文件
@@ -171,4 +171,4 @@ module.exports = {
       enableInSFC: true
     }
   }
-}
+};

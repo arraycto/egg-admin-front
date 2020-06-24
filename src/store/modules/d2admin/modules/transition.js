@@ -1,5 +1,5 @@
 // 设置文件
-import setting from '@/setting.js'
+import setting from '@/setting.js';
 
 export default {
   namespaced: true,
@@ -16,17 +16,17 @@ export default {
     set ({ state, dispatch }, active) {
       return new Promise(async resolve => {
         // store 赋值
-        state.active = active
+        state.active = active;
         // 持久化
         await dispatch('d2admin/db/set', {
           dbName: 'sys',
           path: 'transition.active',
           value: state.active,
           user: true
-        }, { root: true })
+        }, { root: true });
         // end
-        resolve()
-      })
+        resolve();
+      });
     },
     /**
      * 从数据库读取页面过渡动画设置
@@ -40,10 +40,10 @@ export default {
           path: 'transition.active',
           defaultValue: setting.transition.active,
           user: true
-        }, { root: true })
+        }, { root: true });
         // end
-        resolve()
-      })
+        resolve();
+      });
     }
   }
-}
+};

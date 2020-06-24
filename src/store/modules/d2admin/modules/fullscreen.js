@@ -1,4 +1,4 @@
-import screenfull from 'screenfull'
+import screenfull from 'screenfull';
 
 export default {
   namespaced: true,
@@ -16,13 +16,13 @@ export default {
         if (screenfull.enabled) {
           screenfull.on('change', () => {
             if (!screenfull.isFullscreen) {
-              commit('set', false)
+              commit('set', false);
             }
-          })
+          });
         }
         // end
-        resolve()
-      })
+        resolve();
+      });
     },
     /**
      * @description 切换全屏
@@ -31,15 +31,15 @@ export default {
     toggle ({ commit }) {
       return new Promise(resolve => {
         if (screenfull.isFullscreen) {
-          screenfull.exit()
-          commit('set', false)
+          screenfull.exit();
+          commit('set', false);
         } else {
-          screenfull.request()
-          commit('set', true)
+          screenfull.request();
+          commit('set', true);
         }
         // end
-        resolve()
-      })
+        resolve();
+      });
     }
   },
   mutations: {
@@ -49,7 +49,7 @@ export default {
      * @param {Boolean} active active
      */
     set (state, active) {
-      state.active = active
+      state.active = active;
     }
   }
-}
+};

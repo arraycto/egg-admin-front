@@ -5,7 +5,6 @@ import "nprogress/nprogress.css";
 import store from "@/store";
 import { setTitle, cookies, routerUtil } from "@/libs/util";
 import { frameIn, frameOut, errorPage } from "./routes";
-import layoutHeaderAside from "@/layout/header-aside";
 Vue.use(VueRouter);
 
 const router = new VueRouter({

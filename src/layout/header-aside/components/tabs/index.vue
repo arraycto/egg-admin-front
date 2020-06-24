@@ -59,8 +59,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import Sortable from 'sortablejs'
+import { mapState, mapActions } from 'vuex';
+import Sortable from 'sortablejs';
 export default {
   components: {
     D2Contextmenu: () => import('../contextmenu'),
@@ -81,7 +81,7 @@ export default {
         { icon: 'times-circle', title: '关闭全部', value: 'all' }
       ],
       tagName: '/index'
-    }
+    };
   },
   computed: {
     ...mapState('d2admin/page', [
@@ -102,55 +102,55 @@ export default {
      * @description 右键菜单功能点击
      */
     handleContextmenu (event) {
-      let target = event.target
+      let target = event.target;
       // 解决 https://github.com/d2-projects/d2-admin/issues/54
-      let flag = false
-      if (target.className.indexOf('el-tabs__item') > -1) flag = true
+      let flag = false;
+      if (target.className.indexOf('el-tabs__item') > -1) flag = true;
       else if (target.parentNode.className.indexOf('el-tabs__item') > -1) {
-        target = target.parentNode
-        flag = true
+        target = target.parentNode;
+        flag = true;
       }
       if (flag) {
-        event.preventDefault()
-        event.stopPropagation()
-        this.contentmenuX = event.clientX
-        this.contentmenuY = event.clientY
-        this.tagName = target.getAttribute('aria-controls').slice(5)
-        this.contextmenuFlag = true
+        event.preventDefault();
+        event.stopPropagation();
+        this.contentmenuX = event.clientX;
+        this.contentmenuY = event.clientY;
+        this.tagName = target.getAttribute('aria-controls').slice(5);
+        this.contextmenuFlag = true;
       }
     },
     /**
      * @description 右键菜单的row-click事件
      */
     contextmenuClick (command) {
-      this.handleControlItemClick(command, this.tagName)
+      this.handleControlItemClick(command, this.tagName);
     },
     /**
      * @description 接收点击关闭控制上选项的事件
      */
     handleControlItemClick (command, tagName = null) {
       if (tagName) {
-        this.contextmenuFlag = false
+        this.contextmenuFlag = false;
       }
       const params = {
         pageSelect: tagName
-      }
+      };
       switch (command) {
         case 'left':
-          this.closeLeft(params)
-          break
+          this.closeLeft(params);
+          break;
         case 'right':
-          this.closeRight(params)
-          break
+          this.closeRight(params);
+          break;
         case 'other':
-          this.closeOther(params)
-          break
+          this.closeOther(params);
+          break;
         case 'all':
-          this.closeAll()
-          break
+          this.closeAll();
+          break;
         default:
-          this.$message.error('无效的操作')
-          break
+          this.$message.error('无效的操作');
+          break;
       }
     },
     /**
@@ -158,10 +158,10 @@ export default {
      */
     handleClick (tab, event) {
       // 找到点击的页面在 tag 列表里是哪个
-      const page = this.opened.find(page => page.fullPath === tab.name)
-      const { name, params, query } = page
+      const page = this.opened.find(page => page.fullPath === tab.name);
+      const { name, params, query } = page;
       if (page) {
-        this.$router.push({ name, params, query })
+        this.$router.push({ name, params, query });
       }
     },
     /**
@@ -171,18 +171,18 @@ export default {
       if (action === 'remove') {
         this.close({
           tagName
-        })
+        });
       }
     }
   },
   mounted () {
-    const el = document.querySelectorAll('.d2-multiple-page-sort .el-tabs__nav')[0]
+    const el = document.querySelectorAll('.d2-multiple-page-sort .el-tabs__nav')[0];
     Sortable.create(el, {
       onEnd: (evt) => {
-        const { oldIndex, newIndex } = evt
-        this.openedSort({ oldIndex, newIndex })
+        const { oldIndex, newIndex } = evt;
+        this.openedSort({ oldIndex, newIndex });
       }
-    })
+    });
   }
-}
+};
 </script>
